@@ -128,7 +128,7 @@ Route::get('laporan_pemasukans/exportExcel',[
 ]);
 //print laporan pengeluaran
 Route::get('/laporan_uang_keluar/downloadPDF/{view_type}','LaporanPengeluaranController@downloadPDF');
-Route::get('/laporan_uang_keluar/downloadPDF2/{view_type}','LaporanPengeluaranController@downloadPDF2');
+Route::post('/laporan_uang_keluar/downloadPDF2','LaporanPengeluaranController@downloadPDF2');
 
 //print pdf laporan pemasukan
 Route::get('/laporan_uang_masuk/downloadPDF/{view_type}','LaporanPemasukanController@downloadPDF');

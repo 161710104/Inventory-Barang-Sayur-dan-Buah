@@ -163,12 +163,11 @@ class LaporanPengeluaranController extends Controller
         $dari = $request->dari;
         $sampai = $request->sampai;
         $barang_masuks = BarangMasuk::whereBetween('created_at', [$dari, $sampai])->get();
-        $pdf = PDF::loadView('Laporan_Pengeluaran\pdf2', [
+        $pdf = PDF::loadView('Laporan_Pengeluaran/pdf2', [
                 'barang_masuks' => $barang_masuks,
                 'dari' => $dari,
                 'sampai' => $sampai,
               ]);
-        dd($pdf);
         return $pdf->download('Laporan_Pengeluaran.pdf');
     }
 

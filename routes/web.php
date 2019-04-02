@@ -85,6 +85,7 @@ Route::post('storesuppliers','SupplierController@store')->name('tambah');
 Route::post('storecustomers','CustomerController@store');
 Route::post('storebarang_masuks','BarangMasukController@store')->name('tambahbarangmasuk');
 Route::post('storebarang_keluars','BarangKeluarController@store');
+Route::post('storeusers','UserController@store');
 
 
 //update
@@ -93,6 +94,11 @@ Route::get('barang_keluars/getedit/{id}','BarangKeluarController@edit');
 Route::post('barang_keluars/edit/{id}','BarangKeluarController@update');
 Route::get('barang_masuks/getedit/{id}','BarangMasukController@edit');
 Route::post('barang_masuks/edit/{id}','BarangMasukController@update');
+Route::get('users/getedit/{id}','UserController@edit');
+Route::post('users/edit/{id}','UserController@update');
+
+//delete
+Route::get('users/delete/{id}','UserController@delete');
 
 //laporan post
 Route::post('/laporan_pemasukan' , 'LaporanPemasukanController@index2');
@@ -132,6 +138,6 @@ Route::post('/laporan_uang_keluar/downloadPDF2','LaporanPengeluaranController@do
 
 //print pdf laporan pemasukan
 Route::get('/laporan_uang_masuk/downloadPDF/{view_type}','LaporanPemasukanController@downloadPDF');
-Route::get('/laporan_uang_masuk2/downloadPDF/{view_type}','LaporanPemasukanController@downloadPDF2');
+Route::post('/laporan_uang_masuk/downloadPDF','LaporanPemasukanController@downloadPDF2');
 
 

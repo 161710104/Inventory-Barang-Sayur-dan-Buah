@@ -29,7 +29,10 @@
               <div class="table-responsive">
 								<table class="table table-mb-none" id="datatable-ajax">
 									<thead>
+                    <?php $nomor = 1; ?>
+                        @php $no = 1; @endphp
 										<tr>
+
 							               <th>Nama Barang</th>
 							               <th>Jenis</th>
 							               <th>Satuan</th>

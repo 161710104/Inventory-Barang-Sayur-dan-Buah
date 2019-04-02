@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\User;
+use App\Role;
 use Yajra\DataTables\DataTables;
 
 class UserController extends Controller
@@ -37,7 +38,20 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'name' => 'required|min:3|max:30',
+            'email' => 'required',
+            'password' => 'required|min:10',
+          ]);
+    
+          $users = new User;
+          $users->name          = $request->name;
+          $users->email          = $request->email;
+          $users->password          = bcrypt($request->password);
+          $users->save();
+          $karyawanRole = Role::where('name', 'karyawan')->first();
+          $users->attachRole($karyawanRole);
+          return response()->json(['success'=>true]);
     }
 
     /**
@@ -59,7 +73,8 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        //
+        $users = User::find($id);
+        return $users;
     }
 
     /**
@@ -71,7 +86,14 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $users = User::find($id);  
+        $users->name          = $request->name;
+        $users->email          = $request->email;
+        $users->password          = bcrypt($request->password);
+        $users->save();
+        $karyawanRole = Role::where('name', 'karyawan')->first();
+        $users->attachRole($karyawanRole);
+        return response()->json(['success'=>true]);
     }
 
     /**
@@ -85,21 +107,22 @@ class UserController extends Controller
         //
     }
 
-    public function delete($id)
+    public function delete(Request $request)
     {
-        $users = User::find($id);
-        $users->delete();
-        return redirect()->route('users.index');
+        $users = User::find($request->input('id'));
+        if($users->delete())
+        {
+            echo 'Data Dihapus!';
+        }
     }
 
     public function table(){
         $users = User::all();
         return Datatables::of($users)
-
         ->addColumn('action', function ($users) {
               return '<center><a href="#" data-id="'.$users->id.'" rel="tooltip" title="Edit" 
-                        class="btn btn-warning btn-simple btn-xs editSupplier"><i class="fa fa-pencil"></i></a>
-                    &nbsp<a href="/admin/users/'.$users->id.'/delete" rel="tooltip" title="Delete" class="btn btn-danger btn-simple btn-xs delete" data-name="'.$users->nama.'"><i class="fa fa-trash-o"></i></a></center>';
+                        class="btn btn-warning btn-simple btn-xs editUser"><i class="fa fa-pencil"></i></a>
+                    &nbsp<a href="#" id="'.$users->id.'" rel="tooltip" title="Delete" class="btn btn-danger btn-simple btn-xs delete"><i class="fa fa-trash-o"></i></a></center>';
             })
         ->rawColumns(['action'])
         ->make(true);

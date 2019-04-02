@@ -146,12 +146,41 @@ class LaporanPengeluaranController extends Controller
     public function downloadPDF(Request $request)
     {
         $barang_masuks = BarangMasuk::whereDate('created_at', Carbon::today())->get();
+        $satuan_ikat =  Barang::join('barang_masuks', 'barangs.id', '=' , 'barang_masuks.id_barang')
+                          ->whereDate('barang_masuks.created_at', Carbon::today())
+                          ->where('barangs.satuan','Ikat')
+                          ->get();
+        $satuan_kg =  Barang::join('barang_masuks', 'barangs.id', '=' , 'barang_masuks.id_barang')
+                          ->whereDate('barang_masuks.created_at', Carbon::today())
+                          ->where('barangs.satuan','Kilogram')
+                          ->get();
+        $jenis_sayur =  BarangMasuk::join('barangs', 'barangs.id', '=' , 'barang_masuks.id_barang')
+                          ->whereDate('barang_masuks.created_at', Carbon::today())
+                          ->where('barangs.jenis','Sayur')
+                          ->get();
+        $jenis_buah =  BarangMasuk::join('barangs', 'barangs.id', '=' , 'barang_masuks.id_barang')
+                          ->whereDate('barang_masuks.created_at', Carbon::today())
+                          ->where('barangs.jenis','Buah')
+                          ->get();
 
         if($request->view_type === 'download') {
-            $pdf = PDF::loadView('Laporan_Pengeluaran.pdf', ['barang_masuks' => $barang_masuks]);
+            $pdf = PDF::loadView('Laporan_Pengeluaran.pdf', [
+              'barang_masuks' => $barang_masuks,
+              'satuan_ikat' => $satuan_ikat,
+                      'satuan_kg' => $satuan_kg,
+                      'jenis_sayur' => $jenis_sayur,
+                      'jenis_buah' => $jenis_buah,
+            ]);
             return $pdf->download('Laporan_Pengeluaran.pdf');
         } else {
-            $view = View('Laporan_Pengeluaran.pdf', ['barang_masuks' => $barang_masuks]);
+            $view = View('Laporan_Pengeluaran.pdf', [
+              'barang_masuks' => $barang_masuks,
+              'satuan_ikat' => $satuan_ikat,
+                      'satuan_kg' => $satuan_kg,
+                      'jenis_sayur' => $jenis_sayur,
+                      'jenis_buah' => $jenis_buah,
+
+            ]);
             $pdf = \App::make('dompdf.wrapper');
             $pdf->loadHTML($view->render());
             return $pdf->stream();
@@ -163,10 +192,30 @@ class LaporanPengeluaranController extends Controller
         $dari = $request->dari;
         $sampai = $request->sampai;
         $barang_masuks = BarangMasuk::whereBetween('created_at', [$dari, $sampai])->get();
+        $satuan_ikat =  Barang::join('barang_masuks', 'barangs.id', '=' , 'barang_masuks.id_barang')
+                          ->whereDate('barang_masuks.created_at', Carbon::today())
+                          ->where('barangs.satuan','Ikat')
+                          ->get();
+        $satuan_kg =  Barang::join('barang_masuks', 'barangs.id', '=' , 'barang_masuks.id_barang')
+                          ->whereDate('barang_masuks.created_at', Carbon::today())
+                          ->where('barangs.satuan','Kilogram')
+                          ->get();
+        $jenis_sayur =  BarangMasuk::join('barangs', 'barangs.id', '=' , 'barang_masuks.id_barang')
+                          ->whereDate('barang_masuks.created_at', Carbon::today())
+                          ->where('barangs.jenis','Sayur')
+                          ->get();
+        $jenis_buah =  BarangMasuk::join('barangs', 'barangs.id', '=' , 'barang_masuks.id_barang')
+                          ->whereDate('barang_masuks.created_at', Carbon::today())
+                          ->where('barangs.jenis','Buah')
+                          ->get();
         $pdf = PDF::loadView('Laporan_Pengeluaran/pdf2', [
                 'barang_masuks' => $barang_masuks,
                 'dari' => $dari,
                 'sampai' => $sampai,
+                'satuan_ikat' => $satuan_ikat,
+                'satuan_kg' => $satuan_kg,
+                'jenis_sayur' => $jenis_sayur,
+                'jenis_buah' => $jenis_buah,
               ]);
         return $pdf->download('Laporan_Pengeluaran.pdf');
     }

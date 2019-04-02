@@ -36,7 +36,7 @@
 														<div class="col-sm-3">
 															<div class="form-group">
 																<input type="hidden" name="dari" value="{{$dari}}">
-																<input type="hidden" name="smapai" value="{{$sampai}}">
+																<input type="hidden" name="sampai" value="{{$sampai}}">
 																<button type="submit" class="mb-xs mt-xs mr-xs btn btn-warning">
                             									<i class="fa fa-file-pdf-o"></i>&nbspPDF</button>
 															</div>

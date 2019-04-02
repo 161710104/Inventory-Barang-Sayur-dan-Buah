@@ -204,12 +204,41 @@ class LaporanPemasukanController extends Controller
     public function downloadPDF(Request $request)
     {
         $barang_keluars = BarangKeluar::whereDate('created_at', Carbon::today())->get();
+        $satuan_ikat =  Barang::join('barang_keluars', 'barangs.id', '=' , 'barang_keluars.id_barang')
+                          ->whereDate('barang_keluars.created_at', Carbon::today())
+                          ->where('barangs.satuan','Ikat')
+                          ->get();
+        $satuan_kg =  Barang::join('barang_keluars', 'barangs.id', '=' , 'barang_keluars.id_barang')
+                          ->whereDate('barang_keluars.created_at', Carbon::today())
+                          ->where('barangs.satuan','Kilogram')
+                          ->get();
+        $jenis_sayur =  BarangKeluar::join('barangs', 'barangs.id', '=' , 'barang_keluars.id_barang')
+                          ->whereDate('barang_keluars.created_at', Carbon::today())
+                          ->where('barangs.jenis','Sayur')
+                          ->get();
+        $jenis_buah =  BarangKeluar::join('barangs', 'barangs.id', '=' , 'barang_keluars.id_barang')
+                          ->whereDate('barang_keluars.created_at', Carbon::today())
+                          ->where('barangs.jenis','Buah')
+                          ->get();
+        
 
         if($request->view_type === 'download') {
-            $pdf = PDF::loadView('Laporan_Pemasukan.pdf', ['barang_keluars' => $barang_keluars]);
+            $pdf = PDF::loadView('Laporan_Pemasukan.pdf', [
+              'barang_keluars' => $barang_keluars,
+              'satuan_ikat' => $satuan_ikat,
+                      'satuan_kg' => $satuan_kg,
+                      'jenis_sayur' => $jenis_sayur,
+                      'jenis_buah' => $jenis_buah,
+            ]);
             return $pdf->download('Laporan_Pemasukan.pdf');
         } else {
-            $view = View('Laporan_Pemasukan.pdf', ['barang_keluars' => $barang_keluars]);
+            $view = View('Laporan_Pemasukan.pdf', [
+              'barang_keluars' => $barang_keluars,
+              'satuan_ikat' => $satuan_ikat,
+                      'satuan_kg' => $satuan_kg,
+                      'jenis_sayur' => $jenis_sayur,
+                      'jenis_buah' => $jenis_buah,
+            ]);
             $pdf = \App::make('dompdf.wrapper');
             $pdf->loadHTML($view->render());
             return $pdf->stream();
@@ -221,8 +250,28 @@ class LaporanPemasukanController extends Controller
         $dari = $request->dari;
         $sampai = $request->sampai;
         $barang_keluars = BarangKeluar::whereBetween('created_at', [$dari, $sampai])->get();
+        $satuan_ikat =  Barang::join('barang_keluars', 'barangs.id', '=' , 'barang_keluars.id_barang')
+                          ->whereBetween('barang_keluars.created_at', [$dari, $sampai])
+                          ->where('barangs.satuan','Ikat')
+                          ->get();
+        $satuan_kg =  Barang::join('barang_keluars', 'barangs.id', '=' , 'barang_keluars.id_barang')
+                          ->whereBetween('barang_keluars.created_at', [$dari, $sampai])
+                          ->where('barangs.satuan','Kilogram')
+                          ->get();
+        $jenis_sayur =  BarangKeluar::join('barangs', 'barangs.id', '=' , 'barang_keluars.id_barang')
+                          ->whereBetween('barang_keluars.created_at', [$dari, $sampai])
+                          ->where('barangs.jenis','Sayur')
+                          ->get();
+        $jenis_buah =  BarangKeluar::join('barangs', 'barangs.id', '=' , 'barang_keluars.id_barang')
+                          ->whereBetween('barang_keluars.created_at', [$dari, $sampai])
+                          ->where('barangs.jenis','Buah')
+                          ->get();
         $pdf = PDF::loadView('Laporan_Pemasukan.pdf2', [
                 'barang_keluars' => $barang_keluars,
+                'satuan_ikat' => $satuan_ikat,
+                      'satuan_kg' => $satuan_kg,
+                      'jenis_sayur' => $jenis_sayur,
+                      'jenis_buah' => $jenis_buah,
                 'dari' => $dari,
                 'sampai' => $sampai,
               ]);

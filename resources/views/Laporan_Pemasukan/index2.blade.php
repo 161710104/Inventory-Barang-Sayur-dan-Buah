@@ -27,7 +27,7 @@
 											</div>
 
 										</header>
-								<form action="{{ url('laporan_uang_keluar/downloadPDF2/download')}}" method="post">
+								<form action="{{ url('laporan_uang_masuk/downloadPDF')}}" method="post">
                                {{csrf_field()}}
 										<div class="panel-body">
 												<div class="form-body">
@@ -35,12 +35,14 @@
 														<div class="row">
 														<div class="col-sm-3">
 															<div class="form-group">
-																<button type="button" class="mb-xs mt-xs mr-xs modal-with-zoom-anim btn btn-info" data-toggle="modal" data-target="#myModal">
-									                  			<i class="fa fa-print"></i> Print
-												                </button>
+																<input type="hidden" name="dari" value="{{$dari}}">
+																<input type="hidden" name="sampai" value="{{$sampai}}">
+																<button type="submit" class="mb-xs mt-xs mr-xs btn btn-warning">
+                            									<i class="fa fa-file-pdf-o"></i>&nbspPDF</button>
 															</div>
 														</div>
 														</div>
+													</form>
 										                <table class="table mb-none" id="datatable-ajax">
 													<thead>
 														<tr>
@@ -100,7 +102,6 @@
 										            </div>
 
 												</div>
-												@include('Laporan_Pemasukan.print2')
 											</form>
 										</div>
 									</section>

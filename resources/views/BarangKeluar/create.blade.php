@@ -11,7 +11,7 @@
 										<h2 class="panel-title"><i class="fa fa-group" style="margin-top: 20px;margin-left: 20px;"></i>
 											<div class="form-group" >
 													<div class="col-md-4">
-														<select class="form-control mb-md" name="id_customer" id="customer" style="margin-left: 50px;margin-top: -25px;">
+														<select class="select2 form-control cutom-select" name="id_customer" id="customer" style="margin-left: 50px;margin-top: -25px;">
 															<option selected="selected" disabled="disabled" value="">-Pilih Customer-</option>
 															@foreach ($customer as $item)
 															<option value="{{$item->id}}">{{$item->nama}}</option>
@@ -209,8 +209,6 @@
 												</div>
 											</div>
 										</div>
-
-
 												<input type="hidden" name="id_karyawan" value="{{ Auth::user()->id }}">
 												<input type="hidden" name="quantity_awal" id="quantity_awal">
 											</div>

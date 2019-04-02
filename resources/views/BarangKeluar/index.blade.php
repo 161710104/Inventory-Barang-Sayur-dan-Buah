@@ -282,9 +282,12 @@
   });
 
 });
+     $("id_customer").select2({
+      placeholder: 'select Customer',
+      allowClear:true
+    });
 
 
 
-  
   </script>
-@endsection
+  @endsection

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\User;
 use App\Role;
+use Auth;
+use App\LogActivity;
 use Yajra\DataTables\DataTables;
 
 class UserController extends Controller
@@ -39,9 +41,14 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'name' => 'required|min:3|max:30',
+            'name' => 'required|min:3|max:30|unique:users',
             'email' => 'required',
             'password' => 'required|min:10',
+          ],[
+            'name.required' => ':Attribute harus diisi',
+            'name.unique' => ':Attribute sudah ditambahkan',
+            'email.required' => ':Attribute harus diisi',
+            'password.required' => ':Attribute harus diisi',
           ]);
     
           $users = new User;
@@ -91,8 +98,6 @@ class UserController extends Controller
         $users->email          = $request->email;
         $users->password          = bcrypt($request->password);
         $users->save();
-        $karyawanRole = Role::where('name', 'karyawan')->first();
-        $users->attachRole($karyawanRole);
         return response()->json(['success'=>true]);
     }
 
@@ -127,4 +132,30 @@ class UserController extends Controller
         ->rawColumns(['action'])
         ->make(true);
     }
+
+    public function UbahProfil(Request $request){
+        $id = Auth::user()->id;
+        $users = User::find($id);
+        return view('User/ubah_profil',['users' => $users]);
+    }
+
+    public function updateUbahProfil(Request $request, $id)
+    {
+        $id = Auth::user()->id;
+        $users = User::find($id);
+        $users->name          = $request->name;
+        $users->email          = $request->email;
+        $users->password          = bcrypt($request->password);
+        $users->save();
+        return response()->json(['success'=>true]);
+    }
+
+    public function editUbahProfil($id)
+    {
+        $id = Auth::user()->id;
+        $users = User::find($id);
+        return $users;
+    }
+
 }
+

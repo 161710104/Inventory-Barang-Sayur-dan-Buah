@@ -43,19 +43,32 @@ class BarangController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-          'nama_barang' => 'required|min:3|max:30',
+          'nama_barang' => 'required|min:3|max:30|unique:barangs',
           'jenis' => 'required',
           'satuan' => 'required',
           'harga_jual'=>'required|min:3',
+      ],
+      [
+          'nama_barang.required' => ':Attribute harus diisi',
+          'nama_barang.unique' => ':Attribute sudah ditambahkan',
+          'jenis.required' => ':Attribute harus dipilih',
+          'satuan.required' => ':Attribute harus dipilih',
+          'harga_jual.required'=>':Attribute harus diisi',
+
         ]);
 
+        $log = new LogActivity;
         $barangs = new Barang;
         $barangs->nama_barang    = $request->nama_barang;
         $barangs->jenis          = $request->jenis;
         $barangs->satuan          = $request->satuan;
         $barangs->harga_jual    = $request->harga_jual;
+        $barangs->kuantitas = "0";
+        $log->user_id = Auth::user()->id;
+        $log->description = 'Menambahkan data barang = '.$request->nama_barang;
         if($request->harga_jual) {
             $barangs->save();
+            $log->save();
         }
         return response()->json(['success'=>true]);
       }
@@ -100,7 +113,7 @@ class BarangController extends Controller
         $barangs->save();
         $insertLog                = new LogActivity();
         $insertLog->user_id       = Auth::user()->id;
-        $insertLog->description   = 'Tambah Barang :'.$request->nama_barang;
+        $insertLog->description   = 'Edit Barang ID ='.$request->id;
         $insertLog->save();
         return response()->json(['success'=>true]);
     }
@@ -150,8 +163,7 @@ class BarangController extends Controller
 
     public function downloadPDF(Request $request)
     {
-         $barangs = Barang::all();
-
+        $barangs = Barang::all();
         if($request->view_type === 'download') {
             $pdf = PDF::loadView('Barang.pdf', ['barangs' => $barangs]);
             return $pdf->download('List Barang.pdf');

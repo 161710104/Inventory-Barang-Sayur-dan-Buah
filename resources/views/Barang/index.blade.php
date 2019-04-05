@@ -29,10 +29,8 @@
               <div class="table-responsive">
 								<table class="table table-mb-none" id="datatable-ajax">
 									<thead>
-                    <?php $nomor = 1; ?>
-                        @php $no = 1; @endphp
 										<tr>
-
+                      
 							               <th>Nama Barang</th>
 							               <th>Jenis</th>
 							               <th>Satuan</th>
@@ -111,6 +109,21 @@
                     $('#create').attr('hidden',true);
                     $('#index').attr('hidden',false);  
                     $('#datatable-ajax').DataTable().ajax.reload();
+                  },
+                  error:function (data){
+                    $('input').on('keydown keypress keyup click change', function(){
+                      $(this).parent().removeClass('has-error');
+                      $(this).next('.help-block').hide()
+                    });
+                    var coba = new Array();
+                    console.log(data.responseJSON.errors);
+                    $.each(data.responseJSON.errors,function(name,value){
+                      console.log(name);
+                      coba.push(name);
+                      $('input[name='+name+']').parent().addClass('has-error');
+                      $('input[name='+name+']').next('.help-block').show().text(value);
+                    });
+                    $('input[name='+coba[0]+']').focus();
                   },
                   complete: function() {
                       $("#formBarang")[0].reset();

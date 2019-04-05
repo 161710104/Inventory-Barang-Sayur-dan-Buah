@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Barang;
 use App\Customer;
 use App\BarangKeluar;
+use App\LogActivity;
 use Carbon\Carbon;
 use Yajra\DataTables\DataTables;
 use Auth;
@@ -49,7 +50,7 @@ class BarangKeluarController extends Controller
      */
     public function store(Request $request)
     {
-
+        $log = new LogActivity;
         for($id = 0; $id < count($request->id_barang); $id++){
         $barang_keluars = new BarangKeluar;
         $barang_keluars->id_barang          = $request->id_barang[$id];
@@ -61,7 +62,7 @@ class BarangKeluarController extends Controller
 
         $barang = Barang::findOrFail($request->id_barang[$id]);
         $jumlah =  $barang->kuantitas;
-        if ($request->kuantitas[$id] > $barang->kuantitas) {
+        if ($request->kuantitas[$id] >= $barang->kuantitas) {
             Session::flash("flash_notification", [
             "level"=>"danger",
             "message"=>"Stock <b>".$barang->nama_barang."</b> tersedia hanya" . "&nbsp = &nbsp<b>" .$jumlah."</b>"
@@ -114,7 +115,7 @@ class BarangKeluarController extends Controller
      */
     public function update(Request $request, $id)
     {
-
+        $log = new LogActivity;
         $barang_keluars = BarangKeluar::find($id);
         $barang_keluars->id_barang          = $request->id_barang;
         $barang_keluars->kuantitas          = $request->kuantitas;

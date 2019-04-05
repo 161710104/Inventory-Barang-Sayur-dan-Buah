@@ -6,8 +6,10 @@ use Illuminate\Http\Request;
 use App\Customer;
 use App\BarangKeluar;
 use App\Barang;
+use App\LogActivity;
 use Carbon\Carbon;
 use Yajra\DataTables\DataTables;
+use Auth;
 use Yajra\DataTables\Html\Builder;
 
 class CustomerController extends Controller
@@ -42,19 +44,31 @@ class CustomerController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-          'nama' => 'required|min:3|max:30',
+          'nama' => 'required|min:3|max:30|unique:customers',
           'alamat' => 'required',
-          'no_telepon' => 'required|min:10',
+          'no_telepon' => 'required|numeric',
           'awal'=>'required',
           'akhir' =>'required'
+        ],
+        [
+          'nama.required' => ':Attribute harus diisi',
+          'nama.unique' => ':Attribute sudah ditambahkan',
+          'alamat.required' => ':Attribute harus diisi',
+          'no_telepon.required' => ':Attribute harus diisi',
+          'no_telepon.numeric' => ':Attribute yang dimasukkan harus angka',
+          'awal.required'=>':Attribute harus diisi',
+          'akhir.required' =>':Attribute harus diisi',
         ]);
-  
+        
+        $log = new LogActivity;
         $customers = new Customer;
         $customers->nama          = $request->nama;
         $customers->alamat          = $request->alamat;
         $customers->no_telepon          = $request->no_telepon;
         $customers->awal    = $request->awal;
         $customers->akhir = $request->akhir;
+        $log->user_id = Auth::user()->id;
+        $log->description = 'Menambahkan data Customer = '.$request->nama;
         $date1 = Carbon::today();
         $date2 = new Carbon($request->akhir);
         if ($date2 >= $date1) {
@@ -66,6 +80,7 @@ class CustomerController extends Controller
         }
 
         $customers->save();
+        $log->save();
         return response()->json(['success'=>true]);
 
     }
@@ -103,12 +118,15 @@ class CustomerController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $log = new LogActivity;
         $customers = Customer::findorfail($id);
         $customers->nama          = $request->nama;
         $customers->alamat          = $request->alamat;
         $customers->no_telepon          = $request->no_telepon;
         $customers->awal    = $request->awal;
         $customers->akhir = $request->akhir;
+        $log->user_id = Auth::user()->id;
+        $log->description = 'Mengubah data Customer ID = '.$id;
         $date1 = Carbon::today();
         $date2 = new Carbon($request->akhir);
         if ($date2 >= $date1) {
@@ -119,6 +137,7 @@ class CustomerController extends Controller
             $customers->status = 'Deactivate';
         }
         $customers->save();
+        $log->save();
         return response()->json(['success'=>true]); 
     }
 
@@ -165,19 +184,23 @@ class CustomerController extends Controller
 
     public function table(){
         $customers = Customer::all();
+        $date1 = Carbon::today();
         return Datatables::of($customers)
 
         ->addColumn('action', function ($customers) {
-              return '<center><a href="#" data-id="'.$customers->id.'" rel="tooltip" title="Edit"  class="btn btn-warning btn-simple btn-xs editCustomer"><i class="fa fa-pencil"></i></a>&nbsp<a href="/admin/customers/'.$customers->id.'/lihat" rel="tooltip" title="Lihat" class="btn btn-info btn-simple btn-xs"><i class="fa fa-eye"></i></a>&nbsp<a href="#" id="'.$customers->id.'" rel="tooltip" title="Delete" class="btn btn-danger btn-simple btn-xs delete" data-name="'.$customers->nama.'"><i class="fa fa-trash-o"></i></a></center>';
+              return '<center><a href="#" data-id="'.$customers->id.'" rel="tooltip" title="Edit"  class="btn btn-warning btn-simple btn-xs editCustomer"><i class="fa fa-pencil"></i></a>&nbsp<a href="#" id="'.$customers->id.'" rel="tooltip" title="Delete" class="btn btn-danger btn-simple btn-xs delete" data-name="'.$customers->nama.'"><i class="fa fa-trash-o"></i></a></center>';
             })
 
         ->addColumn('statuss', function ($customers) {
               if ($customers->status=="Activate") {
-                return ' <button type="button" class="btn btn-success btn-xs" disabled>
-                            <i class="fa fa-check-circle"></i> Aktif
-                            </button>';
+                return '<button type="button" class="btn btn-danger btn-xs">
+                        <i class="fa fa-ban"></i> Deactivate
+                        </button>';
               }elseif ($customers->status=="Deactivate") {
                 return '<a href="#" data-id="'.$customers->id.'" rel="tooltip" title="perpanjang"  class="btn btn-info btn-simple btn-xs perpanjangcs"><i class=""></i> Perpanjang</a>';
+              }
+              elseif ($date2 < new Carbon($customers->akhir)) {
+                 return '<a href="#" data-id="'.$customers->id.'" rel="tooltip" title="perpanjang"  class="btn btn-info btn-simple btn-xs perpanjangcs"><i class=""></i> Perpanjang</a>';
               }
             })
 
@@ -189,5 +212,17 @@ class CustomerController extends Controller
             })
         ->rawColumns(['action','awal_kerjasama','akhir_kerjasama','statuss'])
         ->make(true);
+    }
+
+    public function Status($id)
+    {
+        $customers = Customer::find($id);
+        if ($customers->status === "Activate") {
+            $customers->status = "Deactivate";
+        } else {
+            $customers->status = "Activate";
+        }
+        $customers->save();
+        return redirect()->route('customers.index');
     }
 }

@@ -17,7 +17,7 @@
 									<a href="#" class="fa fa-caret-down"></a>
 								</div>
 						
-								<h2 class="panel-title">Supplier
+								<h2 class="panel-title"><i class="fa fa-users   "></i> Supplier
                   &nbsp<button type="button" class="mb-xs mt-xs mr-xs btn btn-primary" id="TambahSupplier">
                     <i class="fa fa-plus"></i> Tambah Supplier</button>
                     
@@ -103,6 +103,21 @@
                     $('#create').attr('hidden',true);
                     $('#awal').attr('hidden',false);  
                     $('#datatable-ajax').DataTable().ajax.reload();
+                  },
+                  error:function (data){
+                    $('input').on('keydown keypress keyup click change', function(){
+                      $(this).parent().removeClass('has-error');
+                      $(this).next('.help-block').hide()
+                    });
+                    var coba = new Array();
+                    console.log(data.responseJSON.errors);
+                    $.each(data.responseJSON.errors,function(name,value){
+                      console.log(name);
+                      coba.push(name);
+                      $('input[name='+name+']').parent().addClass('has-error');
+                      $('input[name='+name+']').next('.help-block').show().text(value);
+                    });
+                    $('input[name='+coba[0]+']').focus();
                   },
                   complete: function() {
                       $("#formSupplier")[0].reset();

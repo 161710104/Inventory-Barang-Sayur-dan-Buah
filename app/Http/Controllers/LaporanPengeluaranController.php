@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\BarangMasuk;
 use App\Barang;
+use App\LogActivity;
 use PDF;
 use Excel;
 use Yajra\DataTables\DataTables;

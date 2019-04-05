@@ -17,32 +17,19 @@
 												<input type="hidden" name="id" id="id">
 													<label class="col-md-3 control-label">Nama Barang</label>
 													<div class="col-md-6">
-														
-	
 															<input id="nama_barang" type="text" class="form-control" name="nama_barang">
-														
+													<span class="help-block has-error nama_barang_error"></span>
 													</div>
-                                                    @if ($errors->has('nama_barang'))
-                                                        <span class="help-block">
-                                                            <strong style="color:red;">{{ $errors->first('nama_barang') }}</strong>
-                                                        </span>
-                                                    @endif
 												</div>
 												<div class="form-group">
 													<label class="col-md-3 control-label">Jenis</label>
 													<div class="col-md-6 control-label">
-                                                    
 														<select class="form-control" name="jenis" id="jenis">
                                                                 <option value="Sayur" >Sayur-Sayuran</option> 
                                                                 <option value="Buah" >Buah-Buahan</option>
 														</select>
-													
+														<span class="help-block has-error jenis_error"></span>
 													</div>
-                                                    @if ($errors->has('jenis'))
-                                                    <span class="help-block">
-                                                        <strong style="color:red;">{{ $errors->first('jenis') }}</strong>
-                                                    </span>
-                                                    @endif
 												</div>
 
                                                <div class="form-group">
@@ -53,27 +40,17 @@
                                                                 <option value="Kilogram" >Kilogram</option>
                                                                 <option value="Ikat">IKat</option>
 														</select>
-													
+														<span class="help-block has-error satuan_error"></span>
 													</div>
-                                                    @if ($errors->has('satuan'))
-                                                    <span class="help-block">
-                                                        <strong style="color:red;">{{ $errors->first('satuan') }}</strong>
-                                                    </span>
-                                                    @endif
+                                                    
 												</div>
 
                                                 <div class="form-group">
 													<label class="col-md-3 control-label">Harga Jual / KG</label>
 													<div class="col-md-6">
-														
 													<input type="number" class="form-control" name="harga_jual" id="harga_jual">
-														
+													<span class="help-block has-error harga_error"></span>
 													</div>
-                                                    @if ($errors->has('harga_jual'))
-                                                        <span class="help-block">
-                                                            <strong style="color:red;">{{ $errors->first('harga_jual') }}</strong>
-                                                        </span>
-                                                    @endif
 												</div>
 												
                                                 <div class="form-group">

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\BarangMasuk;
 use App\Barang;
 use App\Supplier;
+use App\LogActivity;
 use Carbon\Carbon;
 use Yajra\DataTables\DataTables;
 use Auth;
@@ -60,9 +61,13 @@ class BarangMasukController extends Controller
         $barang = Barang::findOrFail($request->id_barang[$id]);
         $barang->kuantitas = $barang->kuantitas + $request->kuantitas[$id];
         $barang->harga_beli = $request->harga[$id];
+        $insertLog                = new LogActivity();
+        $insertLog->user_id       = Auth::user()->id; 
+        $insertLog->description   = 'tambah Barang masuk';
         if($request->harga[$id] >= 0 ) {
             $barang->save();
             $barang_masuks->save();
+            $insertLog->save();
         }
     }
         return response()->json(['success'=>true]);
@@ -100,7 +105,7 @@ class BarangMasukController extends Controller
      */
     public function update(Request $request, $id)
     {
-
+        $log = new LogActivity;
         $barang_coba = BarangMasuk::find($id)->whereDate('created_at', Carbon::today())->get();
         $barang_masuks = BarangMasuk::find($id);
         $barang_masuks->id_barang          = $request->id_barang;

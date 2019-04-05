@@ -29,4 +29,9 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\BarangKeluar' ,'id_karyawan');
     }
+
+    public function logs()
+    {
+        return $this->hasMany('App\LogActivity');
+    }
 }

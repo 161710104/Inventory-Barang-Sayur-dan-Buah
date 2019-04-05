@@ -16,17 +16,18 @@
 												</div>
 												 @php
 											      $customers	 = App\Customer::all();
+											      $customerss	 = App\Customer::where('status','Activate')->get();
 											     @endphp
 												<div class="widget-summary-col">
 													<div class="summary">
 														<h4 class="title">Customer</h4>
 														<div class="info">
 															<strong class="amount">{{$customers->count()}}</strong>
-															<span class="text-primary">(14 unread)</span>
+															<span class="text-primary">({{$customerss->count()}} Aktif)</span>
 														</div>
 													</div>
 													<div class="summary-footer">
-														<a class="text-muted text-uppercase">(view all)</a>
+														<a href="/admin/customers" class="text-muted text-uppercase">(lihat selengkapnya)</a>
 													</div>
 												</div>
 											</div>
@@ -53,7 +54,7 @@
 														</div>
 													</div>
 													<div class="summary-footer">
-														<a class="text-muted text-uppercase">(withdraw)</a>
+														<a href="/admin/suppliers" class="text-muted text-uppercase">(lihat selengkapnya)</a>
 													</div>
 												</div>
 											</div>
@@ -77,7 +78,7 @@
 														</div>
 													</div>
 													<div class="summary-footer">
-														<a class="text-muted text-uppercase">(statement)</a>
+														<a href="/admin/barang_keluars" class="text-muted text-uppercase">(lihat selengkapnya)</a>
 													</div>
 												</div>
 											</div>
@@ -101,7 +102,7 @@
 														</div>
 													</div>
 													<div class="summary-footer">
-														<a class="text-muted text-uppercase">(report)</a>
+														<a href="/admin/barang_masuks" class="text-muted text-uppercase">(lihat selengkapnya)</a>
 													</div>
 												</div>
 											</div>
@@ -130,9 +131,89 @@
 											<div class="h3 text-bold mb-none">Rp. {{number_format($lap_pengeluaran->sum('total'),'2',',','.')}}</div>
 											<h5>Total <b>Uang Keluar</b> Hari Ini</h5>
 										</div>
-									</section>
+							</section>
 								</div>
+							</div>
+
+
+							<section class="panel panel-info">
+							<header class="panel-heading">
+								<div class="panel-actions">
+									<a href="#" class="fa fa-caret-down"></a>
 								</div>
+
+								<h2 class="panel-title"><i class="fa fa-users"></i> Log Aktivitas</h2>
+							</header>
+							<div class="panel-body">
+              <div class="table-responsive">
+								<table class="table table-mb-none" id="datatable-ajax">
+									<thead>
+										<tr>
+							               <th>Nama User</th>
+							               <th>Aktivitas</th>
+							               <th>Tanggal</th>
+										</tr>
+									</thead>
+									<tbody>
+										@foreach ($logs as $item)
+                                                    <tr>
+	                                                    <td>
+	                                                    	{{$item->user->name}}
+	                                                	</td>
+	                                                    <td>{{$item->description}}</td>
+	                                                    <td><?php echo date('d F Y h:i:sa' , strtotime($item->created_at)) ?></td>
+                                                    </tr>
+                                                    @endforeach
+
+							          </tbody>
+								</table>
+                </div>
+							</div>
+						</section>
+						<div id="clock"></div>
+						<script type="text/javascript">
+		<!--
+		function showTime() {
+		    var a_p = "";
+		    var today = new Date();
+		    var curr_hour = today.getHours();
+		    var curr_minute = today.getMinutes();
+		    var curr_second = today.getSeconds();
+		    if (curr_hour < 12) {
+		        a_p = "AM";
+		    } else {
+		        a_p = "PM";
+		    }
+		    if (curr_hour == 0) {
+		        curr_hour = 12;
+		    }
+		    if (curr_hour > 12) {
+		        curr_hour = curr_hour - 12;
+		    }
+		    curr_hour = checkTime(curr_hour);
+		    curr_minute = checkTime(curr_minute);
+		    curr_second = checkTime(curr_second);
+		 document.getElementById('clock').innerHTML=curr_hour + ":" + curr_minute + ":" + curr_second + " " + a_p;
+		    }
+ 
+		function checkTime(i) {
+		    if (i < 10) {
+		        i = "0" + i;
+		    }
+		    return i;
+		}
+		setInterval(showTime, 500);
+		//-->
+		</script>
+
+
 									
 
+@endsection
+@section('js')
+<script type="text/javascript">
+  $(document).ready(function(){
+    $('#datatable-ajax').DataTable();
+  });
+  </script>
 @endsection

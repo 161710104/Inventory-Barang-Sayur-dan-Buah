@@ -39,17 +39,15 @@
                                                 </div>
                                                  @php
                                                   $customers     = App\Customer::all();
+                                                  $customerss    = App\Customer::where('status','Activate')->get();
                                                  @endphp
                                                 <div class="widget-summary-col">
                                                     <div class="summary">
                                                         <h4 class="title">Customer</h4>
                                                         <div class="info">
                                                             <strong class="amount">{{$customers->count()}}</strong>
-                                                            <span class="text-primary"></span>
+                                                            <span class="text-primary">({{$customerss->count()}} Aktif)</span>
                                                         </div>
-                                                    </div>
-                                                    <div class="summary-footer">
-                                                        <a class="text-muted text-uppercase">(Lihat)</a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -75,9 +73,6 @@
                                                             <strong class="amount">{{$suppliers->count()}}</strong>
                                                         </div>
                                                     </div>
-                                                    <div class="summary-footer">
-                                                        <a class="text-muted text-uppercase">(Lihat)</a>
-                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -100,7 +95,7 @@
                                                         </div>
                                                     </div>
                                                     <div class="summary-footer">
-                                                        <a class="text-muted text-uppercase">(Lihat)</a>
+                                                        <a href="/karyawan/barang_keluars"class="text-muted text-uppercase">(Lihat selengkapnya)</a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -124,7 +119,7 @@
                                                         </div>
                                                     </div>
                                                     <div class="summary-footer">
-                                                        <a class="text-muted text-uppercase">(Lihat)</a>
+                                                        <a href="/karyawan/barang_masuks"class="text-muted text-uppercase">(Lihat selengkapnya)</a>
                                                     </div>
                                                 </div>
                                             </div>

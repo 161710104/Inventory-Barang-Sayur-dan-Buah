@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\BarangKeluar;
 use App\Barang;
+use App\LogActivity;
 use Yajra\DataTables\DataTables;
 use Carbon\Carbon;
 use PDF;
@@ -249,6 +250,7 @@ class LaporanPemasukanController extends Controller
     {
         $dari = $request->dari;
         $sampai = $request->sampai;
+        $log = new LogActivity;
         $barang_keluars = BarangKeluar::whereBetween('created_at', [$dari, $sampai])->get();
         $satuan_ikat =  Barang::join('barang_keluars', 'barangs.id', '=' , 'barang_keluars.id_barang')
                           ->whereBetween('barang_keluars.created_at', [$dari, $sampai])
@@ -280,6 +282,7 @@ class LaporanPemasukanController extends Controller
 
     public function downloadExcel()
     {
+        $log = new LogActivity;
         $barang_masuk = BarangKeluar::with('barang')
                             ->with('customer')
                             ->with('karyawan')

@@ -76,6 +76,11 @@ Route::group(['prefix'=>'karyawan', 'middleware'=>['auth','role:karyawan|admin|s
    
 
     Route::resource('/laporan_pengeluaran', 'LaporanPengeluaranController');
+
+    Route::get('/ubahprofil', 'UserController@UbahProfil');
+    Route::get('ubahprofil/getedit/{id}','UserController@editUbahProfil');
+    Route::post('ubahprofil/edit/{id}','UserController@updateUbahProfil');
+    
     
     
 });
@@ -96,6 +101,7 @@ Route::get('barang_masuks/getedit/{id}','BarangMasukController@edit');
 Route::post('barang_masuks/edit/{id}','BarangMasukController@update');
 Route::get('users/getedit/{id}','UserController@edit');
 Route::post('users/edit/{id}','UserController@update');
+
 
 //delete
 Route::get('users/delete/{id}','UserController@delete');

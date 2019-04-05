@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'failed' => 'Data yang ada masukan salah.',
+    'failed' => 'Data yang anda masukan salah.',
     'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
 
 ];

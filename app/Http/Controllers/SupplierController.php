@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Supplier;
+use App\LogActivity;
 use Yajra\DataTables\DataTables;
 use Alert;
 
@@ -39,10 +40,17 @@ class SupplierController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'nama' => 'required|min:3|max:30',
+            'nama' => 'required|unique:suppliers',
             'alamat' => 'required',
-            'no_telepon' => 'required|min:10',
-          ]);
+            'no_telepon' => 'required|numeric',
+        ],
+        [
+          'nama.required' => ':Attribute harus diisi',
+          'nama.unique' => ':Attribute sudah ditambahkan',
+          'alamat.required' => ':Attribute harus diisi',
+          'no_telepon.required' => ':Attribute harus diisi',
+          'no_telepon.numeric' => ':Attribute yang dimasukkan harus angka',
+        ]);
     
           $suppliers = new Supplier;
           $suppliers->nama          = $request->nama;

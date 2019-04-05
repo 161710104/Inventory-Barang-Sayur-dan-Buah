@@ -20,12 +20,14 @@
 													<input type="hidden" name="id" id="id">
 													<label class="control-label">Nama Supplier</label>
 													<input type="text" name="nama" id="nama" class="form-control">
+													<span class="help-block has-error nama_error"></span>
 												</div>
 											</div>
 											<div class="col-sm-4">
 												<div class="form-group">
 													<label class="control-label">No Telepon</label>
 													<input type="number" name="no_telepon" id="no_telepon" class="form-control" data-plugin-maxlength maxlength="13">
+													<span class="help-block has-error no_telepon_error"></span>
 												</div>
 											</div>
 										</div>
@@ -34,6 +36,7 @@
 												<div class="form-group">
 													<label class="control-label">Alamat</label>
 													<textarea class="form-control" rows="3" data-plugin-maxlength maxlength="140" name="alamat" id="alamat" style="height: 60px;"></textarea>
+													<span class="help-block has-error alamat_error"></span>
 												</div>
 											</div>
 											<div class="col-sm-4">

@@ -41,6 +41,12 @@
                         <div class="dropdown-menu">
                             <ul class="list-unstyled">
                                 <li class="divider"></li>
+                                @role('karyawan')
+                                <li>
+                                    <a href="/karyawan/ubahprofil">
+                                       <i class="fa fa-lock"></i> Ubah Profil</a>
+                                </li>
+                                @endrole
                                 <li>
                                     <a role="menuitem" tabindex="-1" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();

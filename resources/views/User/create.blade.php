@@ -20,12 +20,14 @@
 													<input type="hidden" name="id" id="id">
 													<label class="control-label">Nama User</label>
 													<input type="text" name="name" id="name" class="form-control">
+													<span class="help-block has-error name_error"></span>
 												</div>
 											</div>
 											<div class="col-sm-4">
 												<div class="form-group">
 													<label class="control-label">Email</label>
 													<input type="email" name="email" id="email" class="form-control">
+													<span class="help-block has-error email_error"></span>
 												</div>
 											</div>
 										</div>
@@ -34,6 +36,7 @@
 												<div class="form-group">
 													<label class="control-label">Kata Sandi</label>
 													<input type="password" name="password" id="password" class="form-control" value="">
+													<span class="help-block has-error password_error"></span>
 												</div>
 											</div>
 											<div class="col-sm-4">

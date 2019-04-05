@@ -20,18 +20,21 @@
 													<input type="hidden" name="id" id="id">
 													<label class="control-label">Nama Customer</label>
 													<input type="text" name="nama" id="nama" class="form-control">
+													<span class="help-block has-error nama_error"></span>
 												</div>
 											</div>
 											<div class="col-sm-4">
 												<div class="form-group">
 													<label class="control-label">No Telepon</label>
 													<input type="number" name="no_telepon" id="no_telepon" class="form-control" data-plugin-maxlength maxlength="13">
+													<span class="help-block has-error no_telepon_error"></span>
 												</div>
 											</div>
 											<div class="col-sm-4">
 												<div class="form-group">
 													<label class="control-label">Alamat</label>
-													<textarea class="form-control" rows="3" data-plugin-maxlength maxlength="140" name="alamat" id="alamat" style="height: 60px;"></textarea>
+													<textarea class="form-control" rows="3" data-plugin-maxlength maxlength="140" name="alamat" id="alamat"></textarea>
+													<span class="help-block has-error alamat_error"></span>
 												</div>
 											</div>
 										</div>	
@@ -42,12 +45,14 @@
 												<div class="form-group">
 													<label class="control-label">Kerjasama Awal</label>
 													<input type="date" name="awal" id="awal" class="form-control">
+													<span class="help-block has-error awal_error"></span>
 												</div>
 											</div>
 											<div class="col-sm-4">
 												<div class="form-group">
 													<label class="control-label">Kerjasama Akhir</label>
 													<input type="date" name="akhir" id="akhir" class="form-control">
+													<span class="help-block has-error akhir_error"></span>
 												</div>
 											</div>
 											<div class="col-sm-4">
@@ -59,6 +64,7 @@
 											</div>
 										</div>
               								<input type="text" name="status" id="status" value="" class="hidden">
+              								<input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
 										</form>
 									</div>
 								</div>

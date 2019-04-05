@@ -10,7 +10,7 @@ use App\BarangMasuk;
 use App\Customer;
 use App\Supplier;
 use App\Barang;
-
+use App\LogActivity;
 class HomeController extends Controller
 {
     /**
@@ -30,6 +30,7 @@ class HomeController extends Controller
      */
     public function index()
     {
+        $logs = LogActivity::all();  
         $lap_pemasukan=  BarangKeluar::whereDate('created_at', Carbon::today())->get();
         $lap_pengeluaran=  BarangMasuk::whereDate('created_at', Carbon::today())->get();
         $barang_keluar = BarangKeluar::whereDate('created_at', Carbon::today())->get();
@@ -39,6 +40,7 @@ class HomeController extends Controller
         $barangs = Barang::all();
         if (Laratrust::hasRole('admin')){
             return view('dashboard.admin',[
+                'logs' => $logs,
                 'lap_pengeluaran' => $lap_pengeluaran,
                 'lap_pemasukan' => $lap_pemasukan,
                 'barang_masuk' => $barang_masuk,
@@ -58,6 +60,8 @@ class HomeController extends Controller
         }
         else if (Laratrust::hasRole('superadmin')){
             return view('dashboard.karyawan');          
-        }         
+        } 
+
+
     }
 }

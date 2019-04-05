@@ -2,11 +2,51 @@
 
 @section('title','Masuk')
 @section('content')
+<style type="text/css">
+    body {
+    background-color: #379dd0;
+}
+
+    .body-sign .panel-sign .panel-body {
+    box-shadow: 2px 2px 2px rgba(70, 35, 35, 0.8);
+</style>
 <section class="body-sign">
             <div class="center-sign">
-                <a href="/" class="logo pull-left">
-                    <img src="assets/images/logo.png" height="54" alt="Porto Admin" />
-                </a>
+                <h2 id="clock" class="logo pull-left" style="color: #fff; font-family: Arial"></h2>
+                        <script type="text/javascript">
+        <!--
+        function showTime() {
+            var a_p = "";
+            var today = new Date();
+            var curr_hour = today.getHours();
+            var curr_minute = today.getMinutes();
+            var curr_second = today.getSeconds();
+            if (curr_hour < 12) {
+                a_p = "AM";
+            } else {
+                a_p = "PM";
+            }
+            if (curr_hour == 0) {
+                curr_hour = 12;
+            }
+            if (curr_hour > 12) {
+                curr_hour = curr_hour - 12;
+            }
+            curr_hour = checkTime(curr_hour);
+            curr_minute = checkTime(curr_minute);
+            curr_second = checkTime(curr_second);
+         document.getElementById('clock').innerHTML=curr_hour + ":" + curr_minute + ":" + curr_second + " " + a_p;
+            }
+ 
+        function checkTime(i) {
+            if (i < 10) {
+                i = "0" + i;
+            }
+            return i;
+        }
+        setInterval(showTime, 500);
+        //-->
+        </script>
 
                 <div class="panel panel-sign">
                     <div class="panel-title-sign mt-xl text-right">
@@ -68,20 +108,19 @@
                             </div>
 
                             <span class="mt-lg mb-lg line-thru text-center text-uppercase">
-                                <span>atau</span>
+                                <span>-</span>
                             </span>
 
                             <div class="mb-xs text-center">
                                
                             </div>
 
-                            <p class="text-center">Don't have an account yet? <a href="{{ url('/register') }}">Daftar!</a>
-
+                            <p class="text-center"><i class="fa fa-home"></i> CV PUTRA ADIDARMA</p>
                         </form>
                     </div>
                 </div>
 
-                <p class="text-center text-muted mt-md mb-md">&copy; Copyright 2018. All rights reserved. Template by <a href="https://colorlib.com">Colorlib</a>.</p>
+                <p class="text-center text-muted mt-md mb-md" style="color: #fff!important">&copy; Copyright 2018.</p>
             </div>
         </section>
 @endsection

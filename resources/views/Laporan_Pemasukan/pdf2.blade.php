@@ -27,12 +27,28 @@ th{
 	<p style="text-align: left;" align="left"><span style="font-size: medium;"><strong>A. Sayuran dan Buah - Buahan</strong></span></p>
 		<p style="text-align: right;">
 		<span style="color: #000000;">
-			<strong>
-				<?php
+		@if($dari == '' && $sampai == '' && $customer == 'all')
+          		<?php
 					$tanggal= mktime(date("m"),date("d"),date("Y"));
 					echo "Tanggal : <b>".date("d-M-Y", $tanggal)."</b> ";
 					date_default_timezone_set('Asia/Jakarta');?>
+        @elseif($dari == '' && $sampai == '')
+          <?php
+					$tanggal= mktime(date("m"),date("d"),date("Y"));
+					echo "Tanggal : <b>".date("d-M-Y", $tanggal)."</b> ";
+					date_default_timezone_set('Asia/Jakarta');?>
+        @elseif($customer == 'all')
+            <strong>
+				<?php echo date('d F Y' , strtotime($dari)) ?> -
+				<?php echo date('d F Y' , strtotime($sampai)) ?>
 	        </strong>
+        @else
+        <strong>
+				<?php echo date('d F Y' , strtotime($dari)) ?> -
+				<?php echo date('d F Y' , strtotime($sampai)) ?>
+	        </strong>
+        @endif
+			
 	    </span>
 	</p>
 	<table class="table mb-none"> 
@@ -46,7 +62,7 @@ th{
 				<th>Nama Customer</th>
 			</tr> 
 		</thead> 
-		<tbody> @foreach ($barang_keluars as $item) <tr> 
+		<tbody> @foreach ($barang_keluar as $item) <tr> 
 			<td>{{ $item->barang->nama_barang }}</td> 
 			<td>{{ $item->barang->jenis }}</td> 	
 			<td>{{ $item->kuantitas }} {{ $item->barang->satuan }}</td> 
@@ -57,7 +73,7 @@ th{
 	</tbody> 
 </table> 
 			<p align="left"><span style="font-size: medium;"><strong>Total Uang Keluar :
-			Rp. {{number_format($barang_keluars->sum('total'),'2',',','.')}}</strong></span></p>
+			Rp. {{number_format($barang_keluar->sum('total'),'2',',','.')}}</strong></span></p>
 			
 			<p align="left"><span style="font-size: medium;"><strong>Total Barang Keluar : </strong></span></p>
 			<ul>

@@ -27,12 +27,28 @@ th{
 	<p style="text-align: left;" align="left"><span style="font-size: medium;"><strong>A. Sayuran dan Buah - Buahan</strong></span></p>
 		<p style="text-align: right;">
 		<span style="color: #000000;">
-			<strong>
-				<?php
+		@if($dari == '' && $sampai == '' && $supplier == 'all')
+          		<?php
 					$tanggal= mktime(date("m"),date("d"),date("Y"));
 					echo "Tanggal : <b>".date("d-M-Y", $tanggal)."</b> ";
 					date_default_timezone_set('Asia/Jakarta');?>
+        @elseif($dari == '' && $sampai == '')
+          <?php
+					$tanggal= mktime(date("m"),date("d"),date("Y"));
+					echo "Tanggal : <b>".date("d-M-Y", $tanggal)."</b> ";
+					date_default_timezone_set('Asia/Jakarta');?>
+        @elseif($supplier == 'all')
+            <strong>
+				<?php echo date('d F Y' , strtotime($dari)) ?> -
+				<?php echo date('d F Y' , strtotime($sampai)) ?>
 	        </strong>
+        @else
+        <strong>
+				<?php echo date('d F Y' , strtotime($dari)) ?> -
+				<?php echo date('d F Y' , strtotime($sampai)) ?>
+	        </strong>
+        @endif
+			
 	    </span>
 	</p>
 	<table class="table mb-none"> 

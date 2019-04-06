@@ -34,6 +34,7 @@
 													<input type="hidden" name="id" id="id">
 													<label class="control-label">Supplier</label>
 													<select name="supplier" class="form-control">
+														<option value="all">Semua Customer</option>
 														@foreach($supplier as $item)
 														<option value="{{$item->id}}">{{$item->nama}}</option>
 														@endforeach
@@ -43,13 +44,13 @@
 											<div class="col-sm-3">
 												<div class="form-group">
 													<label class="control-label">Dari Tanggal</label>
-													<input type="date" name="dari" class="form-control">
+													<input type="date" name="dari" value="" class="form-control">
 												</div>
 											</div>
 											<div class="col-sm-3">
 												<div class="form-group">
 													<label class="control-label">Sampai Tanggal</label>
-													<input type="date" name="sampai" class="form-control">
+													<input type="date" name="sampai" value="" class="form-control">
 												</div>
 											</div>
 											<div class="col-sm-3">

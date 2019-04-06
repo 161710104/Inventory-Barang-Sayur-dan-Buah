@@ -27,7 +27,7 @@
 											</div>
 
 										</header>
-								<form action="{{ url('laporan_uang_masuk/downloadPDF')}}" method="post">
+								<form action="{{ url('laporan_uang_keluar/downloadPDF2')}}" method="post">
                                {{csrf_field()}}
 										<div class="panel-body">
 												<div class="form-body">
@@ -37,6 +37,7 @@
 															<div class="form-group">
 																<input type="hidden" name="dari" value="{{$dari}}">
 																<input type="hidden" name="sampai" value="{{$sampai}}">
+																<input type="hidden" name="customer" value="{{$customer}}">
 																<button type="submit" class="mb-xs mt-xs mr-xs btn btn-warning">
                             									<i class="fa fa-file-pdf-o"></i>&nbspPDF</button>
 															</div>
@@ -102,7 +103,6 @@
 										            </div>
 
 												</div>
-											</form>
 										</div>
 									</section>
 

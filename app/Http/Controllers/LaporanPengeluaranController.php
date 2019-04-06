@@ -120,8 +120,20 @@ class LaporanPengeluaranController extends Controller
         $dari = $request->dari;
         $sampai = $request->sampai;
         $supplier = $request->supplier;
+        if($request->dari == '' && $request->sampai == '' && $request->supplier == 'all') {
+          $barang_masuks = BarangMasuk::whereDate('created_at', Carbon::today())->get();
+        }
+        else if($request->dari == '' && $request->sampai == '') {
+          $barang_masuks = BarangMasuk::whereDate('created_at', Carbon::today())
+                          ->whereIn('id_supplier', [$request->supplier])->get();
+        }
+        else if($request->supplier == 'all') {
+            $barang_masuks = BarangMasuk::whereBetween('created_at', [$dari, $sampai])->get();
+        }
+        else{
         $barang_masuks = BarangMasuk::whereBetween('created_at', [$dari, $sampai])
                           ->whereIn('id_supplier', [$request->supplier])->get();
+        }
         $satuan_ikat =  Barang::join('barang_masuks', 'barangs.id', '=' , 'barang_masuks.id_barang')
                           ->whereBetween('barang_masuks.created_at', [$dari, $sampai])
                           ->where('barangs.satuan','Ikat')
@@ -198,8 +210,21 @@ class LaporanPengeluaranController extends Controller
     {
         $dari = $request->dari;
         $sampai = $request->sampai;
+        $supplier = $request->supplier;
+        if($request->dari == '' && $request->sampai == '' && $request->supplier == 'all') {
+          $barang_masuks = BarangMasuk::whereDate('created_at', Carbon::today())->get();
+        }
+        else if($request->dari == '' && $request->sampai == '') {
+          $barang_masuks = BarangMasuk::whereDate('created_at', Carbon::today())
+                          ->whereIn('id_supplier', [$request->supplier])->get();
+        }
+        else if($request->supplier == 'all') {
+            $barang_masuks = BarangMasuk::whereBetween('created_at', [$dari, $sampai])->get();
+        }
+        else{
         $barang_masuks = BarangMasuk::whereBetween('created_at', [$dari, $sampai])
                           ->whereIn('id_supplier', [$request->supplier])->get();
+        }
         $satuan_ikat =  Barang::join('barang_masuks', 'barangs.id', '=' , 'barang_masuks.id_barang')
                           ->whereDate('barang_masuks.created_at', Carbon::today())
                           ->where('barangs.satuan','Ikat')
@@ -224,6 +249,7 @@ class LaporanPengeluaranController extends Controller
                 'satuan_kg' => $satuan_kg,
                 'jenis_sayur' => $jenis_sayur,
                 'jenis_buah' => $jenis_buah,
+                'supplier' => $supplier,
               ]);
         return $pdf->download('Laporan_Pengeluaran.pdf');
     }

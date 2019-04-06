@@ -21,7 +21,7 @@ class LaporanPemasukanController extends Controller
      */
     public function index(Request $request)
     {
-        $customer = Customer::all()->where('status','Activate');
+        $customer = Customer::all();
         $dari = $request->dari;
         $sampai = $request->sampai;
         $barang_keluar = BarangKeluar::whereBetween('created_at', [$dari, $sampai])->get();
@@ -126,8 +126,21 @@ class LaporanPemasukanController extends Controller
         
         $dari = $request->dari;
         $sampai = $request->sampai;
-        $barang_keluar = BarangKeluar::whereBetween('created_at', [$dari, $sampai])->get();
-        $customer = BarangKeluar::whereIn('id_customer',[$request->customer])->get();
+        $customer = $request->customer;
+        if($request->dari == '' && $request->sampai == '' && $request->customer == 'all') {
+          $barang_keluar = BarangKeluar::whereDate('created_at', Carbon::today())->get();
+        }
+        else if($request->dari == '' && $request->sampai == '') {
+          $barang_keluar = BarangKeluar::whereDate('created_at', Carbon::today())
+                          ->whereIn('id_customer', [$request->customer])->get();
+        }
+        else if($request->customer == 'all') {
+            $barang_keluar = BarangKeluar::whereBetween('created_at', [$dari, $sampai])->get();
+        }
+        else{
+        $barang_keluar = BarangKeluar::whereBetween('created_at', [$dari, $sampai])
+                          ->whereIn('id_customer', [$request->customer])->get();
+        }
         $satuan_ikat =  Barang::join('barang_keluars', 'barangs.id', '=' , 'barang_keluars.id_barang')
                           ->whereBetween('barang_keluars.created_at', [$dari, $sampai])
                           ->where('barangs.satuan','Ikat')
@@ -255,8 +268,21 @@ class LaporanPemasukanController extends Controller
     {
         $dari = $request->dari;
         $sampai = $request->sampai;
-        $log = new LogActivity;
-        $barang_keluars = BarangKeluar::whereBetween('created_at', [$dari, $sampai])->get();
+        $customer = $request->customer;
+        if($request->dari == '' && $request->sampai == '' && $request->customer == 'all') {
+          $barang_keluar = BarangKeluar::whereDate('created_at', Carbon::today())->get();
+        }
+        else if($request->dari == '' && $request->sampai == '') {
+          $barang_keluar = BarangKeluar::whereDate('created_at', Carbon::today())
+                          ->whereIn('id_customer', [$request->customer])->get();
+        }
+        else if($request->customer == 'all') {
+            $barang_keluar = BarangKeluar::whereBetween('created_at', [$dari, $sampai])->get();
+        }
+        else{
+        $barang_keluar = BarangKeluar::whereBetween('created_at', [$dari, $sampai])
+                          ->whereIn('id_customer', [$request->customer])->get();
+        }
         $satuan_ikat =  Barang::join('barang_keluars', 'barangs.id', '=' , 'barang_keluars.id_barang')
                           ->whereBetween('barang_keluars.created_at', [$dari, $sampai])
                           ->where('barangs.satuan','Ikat')
@@ -274,13 +300,14 @@ class LaporanPemasukanController extends Controller
                           ->where('barangs.jenis','Buah')
                           ->get();
         $pdf = PDF::loadView('Laporan_Pemasukan.pdf2', [
-                'barang_keluars' => $barang_keluars,
+                'barang_keluar' => $barang_keluar,
                 'satuan_ikat' => $satuan_ikat,
-                      'satuan_kg' => $satuan_kg,
-                      'jenis_sayur' => $jenis_sayur,
-                      'jenis_buah' => $jenis_buah,
+                'satuan_kg' => $satuan_kg,
+                'jenis_sayur' => $jenis_sayur,
+                'jenis_buah' => $jenis_buah,
                 'dari' => $dari,
                 'sampai' => $sampai,
+                'customer' => $customer,
               ]);
         return $pdf->download('Laporan_Pemasukan.pdf');
     }

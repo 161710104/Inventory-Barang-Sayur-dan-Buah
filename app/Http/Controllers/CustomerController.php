@@ -197,6 +197,8 @@ class CustomerController extends Controller
                  return '<a href="#" data-id="'.$customers->id.'" rel="tooltip" title="perpanjang"  class="btn btn-info btn-simple btn-xs perpanjangcs"><i class=""></i> Perpanjang</a>';
               }
               else if (new Carbon($customers->akhir) > Carbon::today()) {
+                  $customers->status = "Activate";
+                  $customers->save();
                 return '<button type="button" class="btn btn-success btn-xs disabled">
                         <i class="fa fa-check-circle"></i> Aktif
                         </button>';

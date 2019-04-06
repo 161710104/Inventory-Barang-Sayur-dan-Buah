@@ -36,9 +36,9 @@
 													<div class="row">
 											<div class="col-sm-3">
 												<div class="form-group">
-													<input type="hidden" name="id" id="id">
 													<label class="control-label">Customer</label>
 													<select name="customer" class="form-control">
+														<option value="all">Semua Customer</option>
 														@foreach($customer as $item)
 														<option value="{{$item->id}}">{{$item->nama}}</option>
 														@endforeach

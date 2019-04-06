@@ -25,6 +25,7 @@
                                                     @endif
 											</div>
 										</h2>
+										<br>
 									</header>
 									<div class="panel-body">
 											<div class="form-body">
@@ -137,8 +138,8 @@
 										            <tr>
 										              <th>Nama Barang</th>
 										              <th>Kuantitas</th>
-										              <th>Stok</th>
-										              <th>Harga</th>
+										              <th>Stok</th>  
+										              <th>Harga Jual/KG</th>
 										              <th>
 										              	<input type="hidden" name="id_customer" value="">
 										              	<input type="hidden" name="id_karyawan" value="{{ Auth::user()->id }}">

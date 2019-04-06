@@ -121,7 +121,7 @@
 										            <tr id="last">
 										              <th>Nama Barang</th>
 										              <th>Kuantitas</th>
-										              <th>Harga</th>
+										              <th>Harga/KG</th>
 										              <th>
 										              	<input type="hidden" name="id_supplier" value="">
 										              	<input type="hidden" name="id_karyawan" value="{{ Auth::user()->id }}">

@@ -184,23 +184,30 @@ class CustomerController extends Controller
 
     public function table(){
         $customers = Customer::all();
-        $date1 = Carbon::today();
         return Datatables::of($customers)
 
         ->addColumn('action', function ($customers) {
-              return '<center><a href="#" data-id="'.$customers->id.'" rel="tooltip" title="Edit"  class="btn btn-warning btn-simple btn-xs editCustomer"><i class="fa fa-pencil"></i></a>&nbsp<a href="#" id="'.$customers->id.'" rel="tooltip" title="Delete" class="btn btn-danger btn-simple btn-xs delete" data-name="'.$customers->nama.'"><i class="fa fa-trash-o"></i></a></center>';
+              return '<center><a href="#" data-id="'.$customers->id.'" rel="tooltip" title="Edit"  class="btn btn-warning btn-simple btn-xs editCustomer"><i class="fa fa-pencil"></i> Edit</a></center>';
             })
 
         ->addColumn('statuss', function ($customers) {
-              if ($customers->status=="Activate") {
-                return '<button type="button" class="btn btn-danger btn-xs">
-                        <i class="fa fa-ban"></i> Deactivate
+              if (new Carbon($customers->akhir) < Carbon::today()) {
+                  $customers->status = "Deactivate";
+                  $customers->save();
+                 return '<a href="#" data-id="'.$customers->id.'" rel="tooltip" title="perpanjang"  class="btn btn-info btn-simple btn-xs perpanjangcs"><i class=""></i> Perpanjang</a>';
+              }
+              else if (new Carbon($customers->akhir) > Carbon::today()) {
+                return '<button type="button" class="btn btn-success btn-xs disabled">
+                        <i class="fa fa-check-circle"></i> Aktif
                         </button>';
-              }elseif ($customers->status=="Deactivate") {
+              }
+              else if ($customers->status == "Deactivate") {
                 return '<a href="#" data-id="'.$customers->id.'" rel="tooltip" title="perpanjang"  class="btn btn-info btn-simple btn-xs perpanjangcs"><i class=""></i> Perpanjang</a>';
               }
-              elseif ($date2 < new Carbon($customers->akhir)) {
-                 return '<a href="#" data-id="'.$customers->id.'" rel="tooltip" title="perpanjang"  class="btn btn-info btn-simple btn-xs perpanjangcs"><i class=""></i> Perpanjang</a>';
+              else if ($customers->status == "Activate") {
+                return '<button type="button" class="btn btn-success btn-xs disabled">
+                        <i class="fa fa-check-circle"></i> Aktif
+                        </button>';
               }
             })
 

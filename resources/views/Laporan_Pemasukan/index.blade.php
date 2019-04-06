@@ -37,6 +37,17 @@
 											<div class="col-sm-3">
 												<div class="form-group">
 													<input type="hidden" name="id" id="id">
+													<label class="control-label">Customer</label>
+													<select name="customer" class="form-control">
+														@foreach($customer as $item)
+														<option value="{{$item->id}}">{{$item->nama}}</option>
+														@endforeach
+													</select>
+												</div>
+											</div>
+											<div class="col-sm-3">
+												<div class="form-group">
+													<input type="hidden" name="id" id="id">
 													<label class="control-label">Dari Tanggal</label>
 													<input type="date" name="dari" id="dari" class="form-control">
 												</div>

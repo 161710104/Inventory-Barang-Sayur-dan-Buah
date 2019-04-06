@@ -126,8 +126,7 @@ class SupplierController extends Controller
 
         ->addColumn('action', function ($suppliers) {
               return '<center><a href="#" data-id="'.$suppliers->id.'" rel="tooltip" title="Edit" 
-                        class="btn btn-warning btn-simple btn-xs editSupplier"><i class="fa fa-pencil"></i></a>
-                    &nbsp<a href="#" id="'.$suppliers->id.'" rel="tooltip" title="Delete" class="btn btn-danger btn-simple btn-xs delete"><i class="fa fa-trash-o"></i></a></center>';
+                        class="btn btn-warning btn-simple btn-xs editSupplier"><i class="fa fa-pencil"></i> Edit</a>';
             })
         ->rawColumns(['action'])
         ->make(true);

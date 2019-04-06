@@ -15,7 +15,7 @@
                                          <form id="formSupplier" method="post" enctype="multipart/form-data">
  										{{csrf_field()}} {{ method_field('POST') }}
           								<div class="row">
-											<div class="col-sm-4">
+											<div class="col-sm-6">
 												<div class="form-group">
 													<input type="hidden" name="id" id="id">
 													<label class="control-label">Nama Supplier</label>
@@ -23,7 +23,7 @@
 													<span class="help-block has-error nama_error"></span>
 												</div>
 											</div>
-											<div class="col-sm-4">
+											<div class="col-sm-6">
 												<div class="form-group">
 													<label class="control-label">No Telepon</label>
 													<input type="number" name="no_telepon" id="no_telepon" class="form-control" data-plugin-maxlength maxlength="13">
@@ -32,14 +32,14 @@
 											</div>
 										</div>
 										<div class="row">
-											<div class="col-sm-4">
+											<div class="col-sm-6">
 												<div class="form-group">
 													<label class="control-label">Alamat</label>
 													<textarea class="form-control" rows="3" data-plugin-maxlength maxlength="140" name="alamat" id="alamat" style="height: 60px;"></textarea>
 													<span class="help-block has-error alamat_error"></span>
 												</div>
 											</div>
-											<div class="col-sm-4">
+											<div class="col-sm-6">
 												<div class="form-group">
 													<br>
 													<button type="submit" class="mb-xs mt-xs mr-xs btn btn-primary" id="aksi"><i class="fa fa-check-circle"></i> Simpan</button>

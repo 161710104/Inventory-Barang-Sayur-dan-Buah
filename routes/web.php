@@ -15,6 +15,9 @@
 
 Route::get('/', 'HomeController@index');
 Route::get('/coba', 'KaryawanController@index');
+Route::get('/register', function () {
+    return view('errors.404');
+});
 
 Auth::routes();
 

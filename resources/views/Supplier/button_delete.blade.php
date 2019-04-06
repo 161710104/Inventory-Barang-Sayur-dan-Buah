@@ -1,0 +1,1 @@
+&nbsp<a href="#" id="'.$suppliers->id.'" rel="tooltip" title="Delete" class="btn btn-danger btn-simple btn-xs delete"><i class="fa fa-trash-o"></i></a></center>

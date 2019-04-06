@@ -7,6 +7,7 @@ use App\BarangMasuk;
 use App\Barang;
 use App\LogActivity;
 use PDF;
+use App\Supplier;
 use Excel;
 use Yajra\DataTables\DataTables;
 use Carbon\Carbon;
@@ -20,6 +21,7 @@ class LaporanPengeluaranController extends Controller
      */
     public function index()
     {
+        $supplier = Supplier::all();
         $barang_masuk =  BarangMasuk::whereDate('created_at', Carbon::today())->get();
         $satuan_ikat =  Barang::join('barang_masuks', 'barangs.id', '=' , 'barang_masuks.id_barang')
                           ->whereDate('barang_masuks.created_at', Carbon::today())
@@ -43,6 +45,7 @@ class LaporanPengeluaranController extends Controller
                       'satuan_kg' => $satuan_kg,
                       'jenis_sayur' => $jenis_sayur,
                       'jenis_buah' => $jenis_buah,
+                      'supplier' => $supplier,
         ]);
     }
 
@@ -116,7 +119,9 @@ class LaporanPengeluaranController extends Controller
     {
         $dari = $request->dari;
         $sampai = $request->sampai;
-        $barang_masuks = BarangMasuk::whereBetween('created_at', [$dari, $sampai])->get();
+        $supplier = $request->supplier;
+        $barang_masuks = BarangMasuk::whereBetween('created_at', [$dari, $sampai])
+                          ->whereIn('id_supplier', [$request->supplier])->get();
         $satuan_ikat =  Barang::join('barang_masuks', 'barangs.id', '=' , 'barang_masuks.id_barang')
                           ->whereBetween('barang_masuks.created_at', [$dari, $sampai])
                           ->where('barangs.satuan','Ikat')
@@ -141,6 +146,7 @@ class LaporanPengeluaranController extends Controller
                       'satuan_kg' => $satuan_kg,
                       'jenis_sayur' => $jenis_sayur,
                       'jenis_buah' => $jenis_buah,
+                      'supplier' => $supplier
         ]);
     }
 
@@ -192,7 +198,8 @@ class LaporanPengeluaranController extends Controller
     {
         $dari = $request->dari;
         $sampai = $request->sampai;
-        $barang_masuks = BarangMasuk::whereBetween('created_at', [$dari, $sampai])->get();
+        $barang_masuks = BarangMasuk::whereBetween('created_at', [$dari, $sampai])
+                          ->whereIn('id_supplier', [$request->supplier])->get();
         $satuan_ikat =  Barang::join('barang_masuks', 'barangs.id', '=' , 'barang_masuks.id_barang')
                           ->whereDate('barang_masuks.created_at', Carbon::today())
                           ->where('barangs.satuan','Ikat')

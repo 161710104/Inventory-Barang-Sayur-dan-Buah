@@ -4,6 +4,11 @@
 @section('header','Barang')
 
 @section('content')
+<style type="text/css">
+	html .panel-info .panel-heading {
+    background: #34495e;
+}
+</style>
 							<div class="row" style="margin-top: -70px;">
 								<div class="col-md-12 col-lg-6 col-xl-6">
 									<section class="panel panel-featured-left panel-featured-primary">

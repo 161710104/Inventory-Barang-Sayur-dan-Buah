@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\BarangKeluar;
 use App\Barang;
 use App\LogActivity;
+use App\Customer;
 use Yajra\DataTables\DataTables;
 use Carbon\Carbon;
 use PDF;
@@ -20,6 +21,7 @@ class LaporanPemasukanController extends Controller
      */
     public function index(Request $request)
     {
+        $customer = Customer::all()->where('status','Activate');
         $dari = $request->dari;
         $sampai = $request->sampai;
         $barang_keluar = BarangKeluar::whereBetween('created_at', [$dari, $sampai])->get();
@@ -48,7 +50,8 @@ class LaporanPemasukanController extends Controller
                       'jenis_sayur' => $jenis_sayur,
                       'jenis_buah' => $jenis_buah,
                       'dari' => $dari,
-                      'sampai' => $sampai
+                      'sampai' => $sampai,
+                      'customer' => $customer,
         ]);
     }
 
@@ -120,10 +123,11 @@ class LaporanPemasukanController extends Controller
 
     public function index2(Request $request)
     {
-        //
+        
         $dari = $request->dari;
         $sampai = $request->sampai;
         $barang_keluar = BarangKeluar::whereBetween('created_at', [$dari, $sampai])->get();
+        $customer = BarangKeluar::whereIn('id_customer',[$request->customer])->get();
         $satuan_ikat =  Barang::join('barang_keluars', 'barangs.id', '=' , 'barang_keluars.id_barang')
                           ->whereBetween('barang_keluars.created_at', [$dari, $sampai])
                           ->where('barangs.satuan','Ikat')
@@ -147,7 +151,8 @@ class LaporanPemasukanController extends Controller
                       'jenis_sayur' => $jenis_sayur,
                       'jenis_buah' => $jenis_buah,
                       'dari' => $dari,
-                      'sampai' => $sampai
+                      'sampai' => $sampai,
+                      'customer' => $customer,
         ]);
     }
 

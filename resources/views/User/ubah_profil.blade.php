@@ -4,13 +4,37 @@
 @section('header','User')
 
 @section('content')
-					<ul class="app-breadcrumb breadcrumb side">
-					    <li class="breadcrumb-item"><i class="fa fa-home fa-lg"></i></li>
-					    <li class="breadcrumb-item">Ubah Profil</li>
-					</ul>
+<style type="text/css">
+  html .panel-warning .panel-heading {
+    background: #34495e;
+}
+body .btn-warning{
+    color: #ffffff;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+    background-color: #34495e;
+    border-color: #34495e;
+}
+body .btn-success{
+    color: #ffffff;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+    background-color: #34495e;
+    border-color: #34495e;
+}
+.panel {
+    margin-top: -70px;
+}
+body .btn-warning:hover {
+    border-color: #34495e !important;
+    background-color: #34495e;
+}
+body .btn-success:hover {
+    border-color: #34495e !important;
+    background-color: #34495e;
+}
+</style>
 							<div class="row" id="create">
 							<div class="col-xs-12">
-								<section class="panel">
+								<section class="panel panel-warning">
 							<header class="panel-heading">
 								<div class="panel-actions">
 									<a href="#" class="fa fa-caret-down"></a>
@@ -56,19 +80,27 @@
 												</div>
 
 												<div class="form-group">
-													<input type="hidden" name="id" id="id">
-													<label class="col-md-3 control-label">Password</label>
-													<div class="col-md-6">
-													<input id="nama_barang" type="text" class="form-control" name="nama_barang">
-													<span class="help-block has-error nama_barang_error"></span>
+													<label class="col-md-3 control-label">Kata Sandi : </label>
+
+                          <!-- Password -->
+													<div class="col-md-6" id="password_user">
+													<input id="password" type="password" class="form-control" name="password">
+													<span class="help-block has-error password_error"></span>
 													</div>
+                          <!-- endPassword -->
+
+                          <!-- emailtext -->
+                          <div class="col-md-6" id="password_user_text">
+                          <p>***********</p>
+                          </div>
+                          <!-- endemailtext -->
 												</div>
 
 
                                                 <div class="form-group" id="button-2">
 													<label class="col-md-3 control-label"></label>
 													<div class="col-md-6">
-													<button type="submit" class="mb-xs mt-xs mr-xs btn btn-info editUser" id="editUser"><i class="fa fa-pencil"></i> Simpan</button>
+													<button type="submit" class="mb-xs mt-xs mr-xs btn btn-success editUser" id="editUser"><i class="fa fa-pencil"></i> Simpan</button>
                                                     <a class="mb-xs mt-xs mr-xs btn btn-danger" id="cancel"><i class="fa fa-ban"></i> Batal</a>				
                                                 	</div>
                                                 </div>
@@ -98,13 +130,16 @@
 <script type="text/javascript">
      $('#nama_user').attr('hidden',true); 
      $('#email_user').attr('hidden',true); 
+     $('#password_user').attr('hidden',true); 
      $('#button-2').attr('hidden',true); 
 
      $('#cancel').on('click',function(){
            $('#nama_user').attr('hidden',true);
            $('#email_user').attr('hidden',true); 
+           $('#password_user').attr('hidden',true);
            $('#nama_user_text').attr('hidden',false);
            $('#email_user_text').attr('hidden',false);  
+           $('#password_user_text').attr('hidden',false);
            $('#button-2').attr('hidden',true); 
      	   $('#button-1').attr('hidden',false); 
      });
@@ -126,13 +161,16 @@
                 $('#password').val(data.password);
                 $('#nama_user').attr('hidden',false);
                 $('#email_user').attr('hidden',false); 
+                $('#password_user').attr('hidden',false);
                 $('#nama_user_text').attr('hidden',true);
                 $('#email_user_text').attr('hidden',true); 
+                $('#password_user_text').attr('hidden',true); 
      			$('#button-2').attr('hidden',false); 
      			$('#button-1').attr('hidden',true); 
                 }
               });
           });
+
 
       $('#formUser').submit(function(e){
               $.ajaxSetup({
@@ -163,11 +201,34 @@
 		             $('#nama_user_text').attr('hidden',false);
 		             $('#email_user_text').attr('hidden',false);    
                   },
+                  error:function (data){
+                    $('input').on('keydown keypress keyup click change', function(){
+                      $(this).parent().removeClass('has-error');
+                      $(this).next('.help-block').hide()
+                    });
+                    var coba = new Array();
+                    console.log(data.responseJSON.errors);
+                    $.each(data.responseJSON.errors,function(name,value){
+                      console.log(name);
+                      coba.push(name);
+                      $('input[name='+name+']').parent().addClass('has-error');
+                      $('input[name='+name+']').next('.help-block').show().text(value);
+                    });
+                    $('input[name='+coba[0]+']').focus();
+                  },
                   complete: function() {
                       $("#formUser")[0].reset();
                   }
               });
       });
+       $('#nama_user').attr('hidden',true); 
+       $('#email_user').attr('hidden',true); 
+       $('#password_user').attr('hidden',true); 
+       $('#button-2').attr('hidden',true); 
+       $('#nama_user_text').attr('hidden',false);
+       $('#email_user_text').attr('hidden',false); 
+       $('#password_user_text').attr('hidden',false); 
+       $('#button-1').attr('hidden',false); 
 
     
 </script>

@@ -11,6 +11,7 @@ use Carbon\Carbon;
 use Yajra\DataTables\DataTables;
 use Auth;
 use Yajra\DataTables\Html\Builder;
+use Session;
 
 class CustomerController extends Controller
 {
@@ -48,7 +49,7 @@ class CustomerController extends Controller
           'alamat' => 'required',
           'no_telepon' => 'required|numeric',
           'awal'=>'required',
-          'akhir' =>'required'
+          'akhir' =>'required|after:awal'
         ],
         [
           'nama.required' => ':Attribute harus diisi',
@@ -58,6 +59,8 @@ class CustomerController extends Controller
           'no_telepon.numeric' => ':Attribute yang dimasukkan harus angka',
           'awal.required'=>':Attribute harus diisi',
           'akhir.required' =>':Attribute harus diisi',
+          'akhir.after' =>':Attribute tanggal tidak boleh sebelum kerjasama awal',
+
         ]);
         
         $log = new LogActivity;
@@ -118,6 +121,26 @@ class CustomerController extends Controller
      */
     public function update(Request $request, $id)
     {
+
+
+      $this->validate($request, [
+          'nama' => 'required|min:3|max:30',
+          'alamat' => 'required',
+          'no_telepon' => 'required|numeric',
+          'awal'=>'required',
+          'akhir' =>'required|after:awal'
+        ],
+        [
+          'nama.required' => ':Attribute harus diisi',
+          'alamat.required' => ':Attribute harus diisi',
+          'no_telepon.required' => ':Attribute harus diisi',
+          'no_telepon.numeric' => ':Attribute yang dimasukkan harus angka',
+          'awal.required'=>':Attribute harus diisi',
+          'akhir.required' =>':Attribute harus diisi',
+          'akhir.after' =>':Attribute tanggal tidak boleh sebelum kerjasama awal',
+
+        ]);
+
         $log = new LogActivity;
         $customers = Customer::findorfail($id);
         $customers->nama          = $request->nama;
@@ -149,7 +172,20 @@ class CustomerController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $customers = Customer::findOrFail($id);
+        if(!Customer::destroy($id)){
+        return redirect()->back();
+        }elseif ($customers->delete()) {
+          $insertLog                = new LogActivity();
+              $insertLog->user_id       = Auth::user()->id;
+              $insertLog->description   = 'Menghapus data ='.$customers->nama;
+              $insertLog->save();
+          Session::flash("flash_notification", [
+            "level"=>"success",
+            "message"=>"<b>Berhasil Menghapus Data</b>"
+            ]);
+        return redirect()->route('customers.index');
+        }
     }
 
     public function lihat($id)
@@ -185,9 +221,16 @@ class CustomerController extends Controller
     public function table(){
         $customers = Customer::all();
         return Datatables::of($customers)
-
         ->addColumn('action', function ($customers) {
-              return '<center><a href="#" data-id="'.$customers->id.'" rel="tooltip" title="Edit"  class="btn btn-warning btn-simple btn-xs editCustomer"><i class="fa fa-pencil"></i> Edit</a></center>';
+              if (new Carbon($customers->akhir) < Carbon::today()) {
+                  return '<center><a href="#" data-id="'.$customers->id.'" rel="tooltip" title="Edit"  class="btn btn-warning btn-simple btn-xs editCustomer"><i class="fa fa-pencil"></i> Edit</a>&nbsp<a href="/customers/delete/'.$customers->id.'" rel="tooltip" title="Delete" 
+                        class="btn btn-danger btn-simple btn-xs"><i class="fa fa-trash-o"></i> Delete</a></center>';
+              }
+              else if (new Carbon($customers->akhir) >= Carbon::today()) {
+                 return '<center><a href="#" data-id="'.$customers->id.'" rel="tooltip" title="Edit"  class="btn btn-warning btn-simple btn-xs editCustomer"><i class="fa fa-pencil"></i> Edit</a></center>';
+              }
+              return '<center><a href="#" data-id="'.$customers->id.'" rel="tooltip" title="Edit"  class="btn btn-warning btn-simple btn-xs editCustomer"><i class="fa fa-pencil"></i> Edit</a>&nbsp<a href="/customers/delete/'.$customers->id.'" rel="tooltip" title="Delete" 
+                        class="btn btn-danger btn-simple btn-xs"><i class="fa fa-trash-o"></i> Delete</a></center>';
             })
 
         ->addColumn('statuss', function ($customers) {

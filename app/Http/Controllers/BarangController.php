@@ -10,6 +10,7 @@ use PDF;
 use Excel;
 use Yajra\DataTables\DataTables;
 use Yajra\DataTables\Html\Builder;
+use Session;
 
 class BarangController extends Controller
 {
@@ -126,9 +127,20 @@ class BarangController extends Controller
      */
     public function destroy($id)
     {
-        $barangs = Barang::find($id);
-        $barangs->delete();
+        $barangs = Barang::findOrFail($id);
+        if(!Barang::destroy($id)){
+        return redirect()->back();
+        }elseif ($barangs->delete()) {
+          $insertLog                = new LogActivity();
+          $insertLog->user_id       = Auth::user()->id;
+          $insertLog->description   = 'Menghapus data ='.$barangs->nama_barang;
+          $insertLog->save();
+        Session::flash("flash_notification", [
+            "level"=>"success",
+            "message"=>"<b>Berhasil Menghapus Data</b>"
+            ]);
         return redirect()->route('barangs.index');
+        }
     }
 
     public function delete($id)
@@ -145,7 +157,9 @@ class BarangController extends Controller
         return Datatables::of($barangs)
 
         ->addColumn('action', function ($barangs) {
-              return '<center><a href="#" data-id="'.$barangs->id.'" rel="tooltip" title="Edit" class="btn btn-warning btn-simple btn-xs editBarang"><i class="fa fa-pencil"></i></a>&nbsp<a href="#" id="'.$barangs->id.'" rel="tooltip" title="Delete" class="btn btn-danger btn-simple btn-xs delete" data-name="'.$barangs->nama_barang.'"><i class="fa fa-trash-o"></i></a></center>';
+              return '<center><a href="#" data-id="'.$barangs->id.'" rel="tooltip" title="Edit" class="btn btn-warning btn-simple btn-xs editBarang"><i class="fa fa-pencil"></i></a>
+                    &nbsp;<a href="/barangs/delete/'.$barangs->id.'" rel="tooltip" title="Delete" 
+                        class="btn btn-danger btn-simple btn-xs"><i class="fa fa-trash-o"></i> </a></center>';
             })
         ->addColumn('harga_pasar', function ($barangs) {
               return 'Rp.'. number_format($barangs->harga_beli,'2',',','.');

@@ -75,7 +75,7 @@
                             <div class="form-group mb-lg">
                                 <div class="clearfix">
                                     <label class="pull-left">Kata Sandi</label>
-                                    <a href="pages-recover-Kata Sandi.html" class="pull-right">Lupa Kata sandi?</a>
+                                    <!-- <a href="pages-recover-Kata Sandi.html" class="pull-right">Lupa Kata sandi?</a> -->
                                 </div>
                                 <div class="input-group input-group-icon">
                                    

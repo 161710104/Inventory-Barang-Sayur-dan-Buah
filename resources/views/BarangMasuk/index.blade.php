@@ -150,6 +150,21 @@
                     $('#index').attr('hidden',false);  
                     $('#datatable-ajax').DataTable().ajax.reload();
                   },
+                  error:function (data){
+                    $('input').on('keydown keypress keyup click change', function(){
+                      $(this).parent().removeClass('has-error');
+                      $(this).next('.help-block').hide()
+                    });
+                    var coba = new Array();
+                    console.log(data.responseJSON.errors);
+                    $.each(data.responseJSON.errors,function(name,value){
+                      console.log(name);
+                      coba.push(name);
+                      $('input[name='+name+']').parent().addClass('has-error');
+                      $('input[name='+name+']').next('.help-block').show().text(value);
+                    });
+                    $('input[name='+coba[0]+']').focus();
+                  },
                   complete: function() {
                       $("#formBarang_masuk")[0].reset();
                   }
@@ -207,6 +222,7 @@
                 $('#id_barang').val(data.id_barang);
                 $('#jenis').val(data.jenis);
                 $('#kuantitas').val(data.kuantitas);
+                $('#quantity_awal').val(data.kuantitas);
                 $('#harga').val(data.harga);
                 $('#id_supplier').val(data.id_supplier);
                 $('#create').attr('hidden',false);
@@ -252,6 +268,35 @@
                 }
               });
 
+              $(document).on('click', '.delete2', function(){
+              var bebas = $(this).attr('id');
+                if (confirm("Yakin Dihapus ?")) {
+                  $.ajax({
+                    url: 'barang_masuks/delete2' + '/' + bebas,
+                    method: "get",
+                    data:{id:bebas},
+                    success: function(data){
+                      swal({
+                        title:'Success Delete!',
+                        text:'Data Berhasil Dihapus',
+                        type:'success',
+                        timer:'1500'
+                      });
+                      $('#datatable-ajax').DataTable().ajax.reload();
+                    }
+                  })
+                }
+                else
+                {
+                  swal({
+                    title:'Batal',
+                    text:'Data Tidak Jadi Dihapus',
+                    type:'error',
+                    });
+                  return false;
+                }
+              });
+
   });
   </script>
   <script type="text/javascript">
@@ -259,7 +304,7 @@
       var no = $('#item_table tr').length;
       var html = '';
       html +='<tr id="row_'+no+'">';
-      html +='<td><select name="id_barang[]" class="form-control" id="barang">@foreach($barang as $data)<option value="{{$data->id}}">{{$data->nama_barang}}</option>@endforeach</select></td>';
+      html +='<td><select name="id_barang[]" class="form-control" id="barang">@foreach($barang as $data)<option value="{{$data->id}}">{{$data->nama_barang}}</option>@endforeach</select><span class="help-block has-error id_barang_error"></span></td>';
       html +='<td><input type="number" name="kuantitas[]" class="form-control kuantitas"/></td>';
       html +='<td><input type="number" name="harga[]" class="form-control" value=""/></td>';
       html +='<td><button type="button" class="btn btn-danger btn-sm" onclick="remove('+ no +')"><i class="fa fa-minus-square"></i></button></td></tr>';

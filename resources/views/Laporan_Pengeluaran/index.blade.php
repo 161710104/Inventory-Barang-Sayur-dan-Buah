@@ -10,7 +10,7 @@
 					    <li class="breadcrumb-item"><i class="fa fa-home fa-lg"></i></li>
 					    <li class="breadcrumb-item">Laporan Pengeluaran</li>
 					</ul>
-
+					@include('layouts._flash')
 
 						<div class="row">
 							<div class="col-xs-12">
@@ -34,7 +34,7 @@
 													<input type="hidden" name="id" id="id">
 													<label class="control-label">Supplier</label>
 													<select name="supplier" class="form-control">
-														<option value="all">Semua Customer</option>
+														<option value="all">Semua Supplier</option>
 														@foreach($supplier as $item)
 														<option value="{{$item->id}}">{{$item->nama}}</option>
 														@endforeach

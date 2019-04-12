@@ -7,6 +7,7 @@ use App\Supplier;
 use App\LogActivity;
 use Yajra\DataTables\DataTables;
 use Alert;
+use Session;
 
 class SupplierController extends Controller
 {
@@ -108,15 +109,19 @@ class SupplierController extends Controller
      */
     public function destroy($id)
     {
-        //
-    }
-
-    public function delete(Request $request)
-    {
-        $suppliers = Supplier::find($request->input('id'));
-        if($suppliers->delete())
-        {
-            echo 'Data Deleted';
+        $suppliers = Supplier::findOrFail($id);
+        if(!Supplier::destroy($id)){
+        return redirect()->back();
+        }elseif ($suppliers->delete()) {
+            $insertLog                = new LogActivity();
+              $insertLog->user_id       = Auth::user()->id;
+              $insertLog->description   = 'Menghapus data ='.$suppliers->nama;
+              $insertLog->save();
+        Session::flash("flash_notification", [
+            "level"=>"success",
+            "message"=>"<b>Berhasil Menghapus Data</b>"
+            ]);
+        return redirect()->route('suppliers.index');
         }
     }
 
@@ -126,7 +131,9 @@ class SupplierController extends Controller
 
         ->addColumn('action', function ($suppliers) {
               return '<center><a href="#" data-id="'.$suppliers->id.'" rel="tooltip" title="Edit" 
-                        class="btn btn-warning btn-simple btn-xs editSupplier"><i class="fa fa-pencil"></i> Edit</a>';
+                        class="btn btn-warning btn-simple btn-xs editSupplier"><i class="fa fa-pencil"></i></a>
+                        &nbsp<a href="/suppliers/delete/'.$suppliers->id.'" rel="tooltip" title="Delete" 
+                        class="btn btn-danger btn-simple btn-xs"><i class="fa fa-trash-o"></i></a>';
             })
         ->rawColumns(['action'])
         ->make(true);

@@ -8,6 +8,7 @@
 					    <li class="breadcrumb-item"><i class="fa fa-home fa-lg"></i></li>
 					    <li class="breadcrumb-item">User</li>
 					</ul>
+@include('layouts._flash')
 @include('User.create')
 						<section class="panel">
 							<header class="panel-heading">

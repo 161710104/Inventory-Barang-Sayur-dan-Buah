@@ -27,7 +27,7 @@
 											</div>
 
 										</header>
-								<form action="{{ url('laporan_uang_keluar/downloadPDF2')}}" method="post">
+								<form action="{{ url('laporan_uang_masuk/downloadPDF')}}" method="post">
                                {{csrf_field()}}
 										<div class="panel-body">
 												<div class="form-body">

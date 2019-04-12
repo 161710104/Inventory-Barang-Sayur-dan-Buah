@@ -1,17 +1,4 @@
-<?php
 
-use Illuminate\Database\Seeder;
-use App\Barang;
-
-class BarangSeeder extends Seeder
-{
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
-    public function run()
-    {
         $data =  [
 
       [
@@ -25,7 +12,7 @@ class BarangSeeder extends Seeder
       [
         'nama_barang' => 'Bawang Daun',
         'jenis' => 'Sayur',
-        'satuan' => 'IKat',
+        'satuan' => 'Ikat',
         'kuantitas' => '0',
         'harga_jual' => '14400'
       ],
@@ -170,7 +157,6 @@ class BarangSeeder extends Seeder
         'nama_barang' => 'Manggis',
         'jenis' => 'Buah',
         'satuan' => 'Kilogram',
-        'kuantitas' => '0',
         'harga_jual' => '20000'
       ],
 
@@ -178,7 +164,6 @@ class BarangSeeder extends Seeder
         'nama_barang' => 'Pisang',
         'jenis' => 'Buah',
         'satuan' => 'Kilogram',
-        'kuantitas' => '0',
         'harga_jual' => '25000'
       ],
 
@@ -186,7 +171,6 @@ class BarangSeeder extends Seeder
         'nama_barang' => 'Mangga',
         'jenis' => 'Buah',
         'satuan' => 'Kilogram',
-        'kuantitas' => '0',
         'harga_jual' => '18000'
       ],
 
@@ -194,7 +178,6 @@ class BarangSeeder extends Seeder
         'nama_barang' => 'Kiwi',
         'jenis' => 'Buah',
         'satuan' => 'Kilogram',
-        'kuantitas' => '0',
         'harga_jual' => '65000'
       ],
 
@@ -202,7 +185,6 @@ class BarangSeeder extends Seeder
         'nama_barang' => 'Apel',
         'jenis' => 'Buah',
         'satuan' => 'Kilogram',
-        'kuantitas' => '0',
         'harga_jual' => '38000'
       ],
 
@@ -210,7 +192,6 @@ class BarangSeeder extends Seeder
         'nama_barang' => 'Melon',
         'jenis' => 'Buah',
         'satuan' => 'Kilogram',
-        'kuantitas' => '0',
         'harga_jual' => '17000'
       ],
 
@@ -218,7 +199,6 @@ class BarangSeeder extends Seeder
         'nama_barang' => 'Jeruk',
         'jenis' => 'Buah',
         'satuan' => 'Kilogram',
-        'kuantitas' => '0',
         'harga_jual' => '20000'
       ],
 
@@ -226,7 +206,6 @@ class BarangSeeder extends Seeder
         'nama_barang' => 'Kemangi',
         'jenis' => 'Sayur',
         'satuan' => 'Ikat',
-        'kuantitas' => '0',
         'harga_jual' => '35000'
       ],
 
@@ -668,4 +647,3 @@ class BarangSeeder extends Seeder
 
       Barang::insert($data);
     }
-}

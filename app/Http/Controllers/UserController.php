@@ -8,6 +8,7 @@ use App\Role;
 use Auth;
 use App\LogActivity;
 use Yajra\DataTables\DataTables;
+use Session;
 
 class UserController extends Controller
 {
@@ -42,13 +43,14 @@ class UserController extends Controller
     {
         $this->validate($request, [
             'name' => 'required|min:3|max:30|unique:users',
-            'email' => 'required',
-            'password' => 'required|min:10',
+            'email' => 'required|unique:users',
+            'password' => 'required|min:6',
           ],[
             'name.required' => ':Attribute harus diisi',
             'name.unique' => ':Attribute sudah ditambahkan',
             'email.required' => ':Attribute harus diisi',
             'password.required' => ':Attribute harus diisi',
+            'email.unique' => ':Attribute sudah ditambahkan'
           ]);
     
           $users = new User;
@@ -56,6 +58,10 @@ class UserController extends Controller
           $users->email          = $request->email;
           $users->password          = bcrypt($request->password);
           $users->save();
+          $insertLog                = new LogActivity();
+          $insertLog->user_id       = Auth::user()->id;
+          $insertLog->description   = 'Tambah data user ='.$request->name;
+          $insertLog->save();
           $karyawanRole = Role::where('name', 'karyawan')->first();
           $users->attachRole($karyawanRole);
           return response()->json(['success'=>true]);
@@ -98,6 +104,10 @@ class UserController extends Controller
         $users->email          = $request->email;
         $users->password          = bcrypt($request->password);
         $users->save();
+        $insertLog                = new LogActivity();
+          $insertLog->user_id       = Auth::user()->id;
+          $insertLog->description   = 'Ubah User'.$request->name;
+          $insertLog->save();
         return response()->json(['success'=>true]);
     }
 
@@ -109,7 +119,20 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $users = User::findOrFail($id);
+        if(!User::destroy($id)){
+        return redirect()->back();
+        }elseif ($users->delete()) {
+          $insertLog                = new LogActivity();
+          $insertLog->user_id       = Auth::user()->id;
+          $insertLog->description   = 'Menghapus data ='.$users->name;
+          $insertLog->save();
+        Session::flash("flash_notification", [
+            "level"=>"success",
+            "message"=>"<b>Berhasil Menghapus Data</b>"
+            ]);
+        return redirect()->route('users.index');
+        }
     }
 
     public function delete(Request $request)
@@ -117,7 +140,10 @@ class UserController extends Controller
         $users = User::find($request->input('id'));
         if($users->delete())
         {
-            echo 'Data Dihapus!';
+           $insertLog                = new LogActivity();
+          $insertLog->user_id       = Auth::user()->id;
+          $insertLog->description   = 'Ubah Profil';
+          $insertLog->save();
         }
     }
 
@@ -125,9 +151,16 @@ class UserController extends Controller
         $users = User::all();
         return Datatables::of($users)
         ->addColumn('action', function ($users) {
+            if($users->name == 'Admin'){
+                return '<center><a href="#" data-id="'.$users->id.'" rel="tooltip" title="Edit" 
+                        class="btn btn-warning btn-simple btn-xs editUser"><i class="fa fa-pencil"></i> Edit</a></center>';
+            }
+            else{
               return '<center><a href="#" data-id="'.$users->id.'" rel="tooltip" title="Edit" 
-                        class="btn btn-warning btn-simple btn-xs editUser"><i class="fa fa-pencil"></i></a>
-                    &nbsp<a href="#" id="'.$users->id.'" rel="tooltip" title="Delete" class="btn btn-danger btn-simple btn-xs delete"><i class="fa fa-trash-o"></i></a></center>';
+                        class="btn btn-warning btn-simple btn-xs editUser"><i class="fa fa-pencil"></i> Edit</a>
+                    &nbsp<a href="/users/delete/'.$users->id.'" rel="tooltip" title="Delete" 
+                        class="btn btn-danger btn-simple btn-xs"><i class="fa fa-trash-o"></i> Delete</a>';
+            }
             })
         ->rawColumns(['action'])
         ->make(true);
@@ -141,12 +174,15 @@ class UserController extends Controller
 
     public function updateUbahProfil(Request $request, $id)
     {
-        $id = Auth::user()->id;
         $users = User::find($id);
         $users->name          = $request->name;
         $users->email          = $request->email;
         $users->password          = bcrypt($request->password);
         $users->save();
+        $insertLog                = new LogActivity();
+          $insertLog->user_id       = Auth::user()->id;
+          $insertLog->description   = 'Ubah Profil';
+          $insertLog->save();
         return response()->json(['success'=>true]);
     }
 

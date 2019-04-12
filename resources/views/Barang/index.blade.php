@@ -8,7 +8,7 @@
 					    <li class="breadcrumb-item"><i class="fa fa-home fa-lg"></i></li>
 					    <li class="breadcrumb-item">Barang</li>
 					</ul>
-
+          @include('layouts._flash')
           @include('Barang.create')
           <div id="index">
 						<section class="panel">

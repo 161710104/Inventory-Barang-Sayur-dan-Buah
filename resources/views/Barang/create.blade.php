@@ -56,7 +56,7 @@
                                                 <div class="form-group">
 													<label class="col-md-3 control-label"></label>
 													<div class="col-md-6">
-                                                    <button type="submit" class="mb-xs mt-xs mr-xs btn btn-primary"><i class="fa fa-check-circle" id="aksi"></i> Simpan</button>
+                                                    <button type="submit" class="mb-xs mt-xs mr-xs btn btn-primary" onclick="return confirm('Yakin ingin menambahkan data?')"><i class="fa fa-check-circle" id="aksi"></i> Simpan</button>
                                                     <button type="reset" class="mb-xs mt-xs mr-xs btn btn-danger"><i class="fa fa-ban"></i> Hapus</button>
                                                 </div>
                                             </div>

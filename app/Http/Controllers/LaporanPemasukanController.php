@@ -11,6 +11,7 @@ use Yajra\DataTables\DataTables;
 use Carbon\Carbon;
 use PDF;
 use Excel;
+use Session;
 
 class LaporanPemasukanController extends Controller
 {
@@ -127,6 +128,7 @@ class LaporanPemasukanController extends Controller
         $dari = $request->dari;
         $sampai = $request->sampai;
         $customer = $request->customer;
+        if(new Carbon($request->sampai) > new Carbon($request->dari)){
         if($request->dari == '' && $request->sampai == '' && $request->customer == 'all') {
           $barang_keluar = BarangKeluar::whereDate('created_at', Carbon::today())->get();
         }
@@ -141,6 +143,7 @@ class LaporanPemasukanController extends Controller
         $barang_keluar = BarangKeluar::whereBetween('created_at', [$dari, $sampai])
                           ->whereIn('id_customer', [$request->customer])->get();
         }
+
         $satuan_ikat =  Barang::join('barang_keluars', 'barangs.id', '=' , 'barang_keluars.id_barang')
                           ->whereBetween('barang_keluars.created_at', [$dari, $sampai])
                           ->where('barangs.satuan','Ikat')
@@ -167,6 +170,14 @@ class LaporanPemasukanController extends Controller
                       'sampai' => $sampai,
                       'customer' => $customer,
         ]);
+      }
+      elseif(new Carbon($request->sampai) < new Carbon($request->dari)){
+            Session::flash("flash_notification",[
+                "level" => "danger",
+                "message" => "Tanggal yang dimasukkan tidak valid"
+            ]);
+            return redirect()->back();
+        }
     }
 
     public function table(){

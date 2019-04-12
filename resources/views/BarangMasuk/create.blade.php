@@ -116,7 +116,7 @@
  										{{csrf_field()}} {{ method_field('POST') }}
 											<input type="hidden" name="id" id="id">
 											<div class="form-body content" id="bm_create">
-												<center><button type="submit" class="mb-xs mt-xs mr-xs btn btn-primary"><i class="fa fa-check-circle"></i> Simpan</button></h2></center>
+												<center><button type="submit" onclick="return confirm('Yakin ingin menambahkan data?')" class="mb-xs mt-xs mr-xs btn btn-primary"><i class="fa fa-check-circle"></i> Simpan</button></h2></center>
 												<table id="item_table" class="table table-bordered">
 										            <tr id="last">
 										              <th>Nama Barang</th>

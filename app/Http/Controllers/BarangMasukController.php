@@ -119,6 +119,10 @@ class BarangMasukController extends Controller
             $kuantitas = $request->quantity_awal - $request->kuantitas;
             $barang->kuantitas =  $barang->kuantitas - $kuantitas;
             $barang->harga_beli = $request->harga;
+            $insertLog                = new LogActivity();
+            $insertLog->user_id       = Auth::user()->id; 
+            $insertLog->description   = 'Edit Barang masuk';
+            $insertLog->save();
             $barang->save();
         }
         $barang_masuks->save();
@@ -148,6 +152,19 @@ class BarangMasukController extends Controller
          if($barang_masuks->delete())
         {
             echo 'Data Deleted';
+            $insertLog                = new LogActivity();
+              $insertLog->user_id       = Auth::user()->id;
+              $insertLog->description   = 'Menghapus data ='.$barang_masuks->barang->nama_barang;
+              $insertLog->save();
+        }
+    }
+
+    public function delete2($id)
+    {
+        $barang_masuks = BarangMasuk::find($id);
+         if($barang_masuks->delete())
+        {
+            echo 'Data Deleted';
         }
     }
 
@@ -156,7 +173,12 @@ class BarangMasukController extends Controller
         return Datatables::of($barang_masuks)
 
         ->addColumn('action', function ($barang_masuks) {
-              return '<center><a href="#" data-id="'.$barang_masuks->id.'" rel="tooltip" title="Edit" class="btn btn-warning btn-simple btn-xs editBarang"><i class="fa fa-pencil"></i></a>&nbsp<a href="#" id="'.$barang_masuks->id.'" rel="tooltip" title="Delete" class="btn btn-danger btn-simple btn-xs delete" data-name="'.$barang_masuks->id.'"><i class="fa fa-trash-o"></i></a></center>';
+            if($barang_masuks->created_at > Carbon::today()){
+                return '<center><a href="#" data-id="'.$barang_masuks->id.'" rel="tooltip" title="Edit" class="btn btn-warning btn-simple btn-xs editBarang"><i class="fa fa-pencil"></i></a>&nbsp<a href="#" id="'.$barang_masuks->id.'" rel="tooltip" title="Delete" class="btn btn-danger btn-simple btn-xs delete" data-name="'.$barang_masuks->id.'"><i class="fa fa-trash-o"></i></a></center>';
+            }
+            else if($barang_masuks->created_at < Carbon::today()){
+              return '<center><a href="#" id="'.$barang_masuks->id.'" rel="tooltip" title="Delete" class="btn btn-danger btn-simple btn-xs delete2" data-name="'.$barang_masuks->id.'"><i class="fa fa-trash-o"></i></a></center>';
+            }
             })
         ->addColumn('tanggal_masuk', function ($barang_masuks) {
               return date('d F Y' , strtotime($barang_masuks->created_at));

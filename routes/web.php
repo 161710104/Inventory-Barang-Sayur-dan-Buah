@@ -57,9 +57,11 @@ Route::group(['prefix'=>'admin', 'middleware'=>['auth','role:admin']], function 
 
     Route::resource('barang_masuks', 'BarangMasukController');
     Route::get('/barang_masuks/delete/{id}','BarangMasukController@delete');
+    Route::get('/barang_masuks/delete2/{id}','BarangMasukController@delete2');
 
     Route::resource('barang_keluars', 'BarangKeluarController');
     Route::get('/barang_keluars/delete/{id}','BarangKeluarController@delete');
+    Route::get('/barang_keluars/delete2/{id}','BarangKeluarController@delete2');
 
     Route::resource('/akumulasi', 'LaporanPemasukanController');
 
@@ -71,9 +73,11 @@ Route::group(['prefix'=>'admin', 'middleware'=>['auth','role:admin']], function 
 Route::group(['prefix'=>'karyawan', 'middleware'=>['auth','role:karyawan|admin|superadmin']], function () {
     Route::resource('barang_masuks', 'BarangMasukController');
     Route::get('/barang_masuks/delete/{id}','BarangMasukController@delete');
+    Route::get('/barang_masuks/delete2/{id}','BarangMasukController@delete2');
 
     Route::resource('barang_keluars', 'BarangKeluarController');
-     Route::get('/barang_keluars/delete/{id}','BarangKeluarController@delete');
+    Route::get('/barang_keluars/delete/{id}','BarangKeluarController@delete');
+    Route::get('/barang_keluars/delete2/{id}','BarangKeluarController@delete2');
 
     Route::resource('/akumulasi', 'LaporanPemasukanController');
    
@@ -148,5 +152,10 @@ Route::post('/laporan_uang_keluar/downloadPDF2','LaporanPengeluaranController@do
 //print pdf laporan pemasukan
 Route::get('/laporan_uang_masuk/downloadPDF/{view_type}','LaporanPemasukanController@downloadPDF');
 Route::post('/laporan_uang_masuk/downloadPDF','LaporanPemasukanController@downloadPDF2');
+
+Route::get('/suppliers/delete/{id}','SupplierController@destroy');
+Route::get('/customers/delete/{id}','CustomerController@destroy');  
+Route::get('/users/delete/{id}','UserController@destroy');  
+Route::get('/barangs/delete/{id}','BarangController@destroy');  
 
 

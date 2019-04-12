@@ -93,6 +93,9 @@
 
 							</div>
 						</div>
+						<div class="col-xs-12">
+						<div id="stoklebih"></div>
+                        </div>
                         <div class="row">
 							<div class="col-xs-12">
 								<section class="panel">
@@ -100,7 +103,7 @@
 										<div class="panel-actions">
 											<a href="#" class="fa fa-caret-down"></a>
 										</div>
-										<h2 class="panel-title"><i class="fa fa-plus"></i> Tambah Barang Keluar</h2>
+										<h2 class="panel-title"><i class="fa fa-pencil"></i> Barang Keluar</h2>
 										<div style="position:absolute;right:100px;top:10px;">
 							                <h5>
 						                        <div>
@@ -132,7 +135,8 @@
 											<input type="hidden" name="id" id="id">
 	                                           
 											<div class="form-body content" id="bm_create">
-												<center><button type="submit" class="mb-xs mt-xs mr-xs btn btn-primary"><i class="fa fa-check-circle"></i> Simpan</button></h2></center>
+												<center><button type="submit" onclick="return confirm('Yakin ingin menambahkan data?')" class="mb-xs mt-xs mr-xs btn btn-primary"><i class="fa fa-check-circle"></i> Simpan</button></h2></center>
+												
 												<table id="item_table" class="table table-bordered">
 													<thead>
 										            <tr>
@@ -149,8 +153,8 @@
 										        <tbody id="coba">
 										        	<tr id="row">
 										        		<td><select name="id_barang[]" class="form-control barangselect select-pilih" id="barang">@foreach($barang as $data)<option value="{{$data->id}}">{{$data->nama_barang}}</option>@endforeach</select></td>
-													    <td><input type="number" name="kuantitas[]" class="form-control kuantitas"/></td>
-													    <td><input type="text" class="form-control stok" readonly /></td>
+													    <td><input type="number" name="kuantitas[]" class="form-control kuantitas" id="#akuantitas" /></td>
+													    <td><input type="number" class="form-control sisa_stok" id="sisa_stok" readonly/><input type="hidden" name="total_stok" class="form-control stok" id="stok"/></td>
 													    <td><input type="number" name="harga[]" id="harga_jual" class="form-control harga_jual" value=""/></td>
 													    <td><button type="button" class="btn btn-danger btn-sm" onclick="remove('+ no +')"><i class="fa fa-minus-square"></i></button>
 													    </td>
@@ -158,6 +162,7 @@
 										        </tbody>
 										        </table>
 											</div>
+
 									<div class="form-body" id="bm_edit">
 										<div class="row">
 											<div class="col-sm-4">
@@ -211,7 +216,7 @@
 											</div>
 										</div>
 												<input type="hidden" name="id_karyawan" value="{{ Auth::user()->id }}">
-												<input type="hidden" name="quantity_awal" id="quantity_awal">
+												<input type="hidden" name="quantity_awal" id="quantity_awall">
 											</div>
 										</form>
 									</div>

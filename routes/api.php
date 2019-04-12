@@ -20,6 +20,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::group(
 	['as' => 'api.', 'middleware'=>['cors']],
 	function () {
-		Route::resource('latihan', 'API\LatihanController');
+		Route::get('buah' , 'API\AndroidController@buah');
+		Route::get('sayur' , 'API\AndroidController@sayur');
+		Route::get('barang' , 'API\AndroidController@barang');
+		Route::get('customer' , 'API\AndroidController@customer');
 	}
 );

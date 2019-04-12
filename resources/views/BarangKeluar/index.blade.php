@@ -71,7 +71,7 @@
     $('#TambahBarangMasuk').on('click',function(){
             $('#create').attr('hidden',false);
             $('#index').attr('hidden',true);
-            $('#bm_edit').remove();  
+            $('#bm_edit').detach();  
             state = "insert"; 
             });
 
@@ -167,6 +167,7 @@
                 $('#id_barang').val(data.id_barang);
                 $('#jenis').val(data.jenis);
                 $('#kuantitas').val(data.kuantitas);
+                $('#quantity_awall').val(data.kuantitas);
                 $('#harga').val(data.harga);
                 $('#id_supplier').val(data.id_supplier);
                 $('#create').attr('hidden',false);
@@ -210,6 +211,35 @@
                   return false;
                 }
               });
+
+      $(document).on('click', '.delete2', function(){
+              var bebas = $(this).attr('id');
+                if (confirm("Yakin Dihapus ?")) {
+                  $.ajax({
+                    url: 'barang_keluars/delete2' + '/' + bebas,
+                    method: "get",
+                    data:{id:bebas},
+                    success: function(data){
+                      swal({
+                        title:'Success Delete!',
+                        text:'Data Berhasil Dihapus',
+                        type:'success',
+                        timer:'1500'
+                      });
+                      $('#datatable-ajax').DataTable().ajax.reload();
+                    }
+                  })
+                }
+                else
+                {
+                  swal({
+                    title:'Batal',
+                    text:'Data Tidak Jadi Dihapus',
+                    type:'error',
+                    });
+                  return false;
+                }
+              });
   });
   </script>
   <script type="text/javascript">
@@ -228,8 +258,26 @@
         success:function(data){
           tr.find('.harga_jual').val(data.harga_jual);
           tr.find('.stok').val(data.kuantitas);
+          tr.find('.sisa_stok').val(data.kuantitas);
         }
       });
+    });
+    $('.content').delegate('.stok,.sisa_stok,.kuantitas','keyup',function(){
+      var tr = $(this).parent().parent();
+      var kuantitas = tr.find('.kuantitas').val();
+      var stok = tr.find('.stok').val();
+      var sisa_stok = (stok - kuantitas);
+      if (parseInt(kuantitas) > parseInt(stok)) {
+        $('#stoklebih').show();
+        var stoklebih = "Kuantitas melebihi stok, otomatis input semua stok"
+        $('#stoklebih').addClass('alert alert-danger alert-dismissable fade in').html(stoklebih);
+        setTimeout(function(){
+          $('#stoklebih').fadeOut('slow');
+        },5000);
+        tr.find('.kuantitas').val(stok);
+      }else{
+        tr.find('.sisa_stok').val(sisa_stok);
+      }
     });
       
       var count = 1
@@ -238,9 +286,9 @@
         var html = "<tr id='row"+count+"'>";
         html +='<td><select name="id_barang[]" class="form-control barangselect select-pilih" id="barang">@foreach($barang as $data)<option value="{{$data->id}}">{{$data->nama_barang}}</option>@endforeach</select></td>';
 
-        html +='<td><input type="number" name="kuantitas[]" class="form-control kuantitas"/></td>';
+        html +='<td><input type="number" name="kuantitas[]" class="form-control kuantitas" id="akuantitas"/></td>';
 
-        html +='<td><input type="text" class="form-control stok" readonly/></td>';
+        html +='<td><input type="text" class="form-control sisa_stok" id="sisa_stok" readonly/><input type="hidden" name="total_stok" class="form-control stok" id="stok"/></td>';
 
         html +='<td><input type="number" name="harga[]" id="harga_jual" class="form-control harga_jual" value=""/></td>';
 
@@ -282,11 +330,7 @@
   });
 
 });
-     $("id_customer").select2({
-      placeholder: 'select Customer',
-      allowClear:true
-    });
-
+    
 
 
   </script>

@@ -25,6 +25,7 @@ th{
 	<p align="center"><span style="font-size: large;"><u><strong>DAFTAR HARGA DAN KETERANGAN PRODUK</strong></u></span></p>
 	<p align="center">&nbsp;</p>
 	<p style="text-align: left;" align="left"><span style="font-size: medium;"><strong>A. Sayuran dan Buah - Buahan</strong></span></p>
+	<p style="color: red"><b><i>*Sewaktu - waktu harga jual bisa berubah</i></b></p>
 	<table> 
 		<thead> 
 			<tr> 
@@ -42,6 +43,13 @@ th{
 		</tr> @endforeach 
 	</tbody> 
 </table> 
+
+<p style="text-align: center;">&nbsp;</p>
+<p style="text-align: left;">PERSETUJUAN,&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; HORMAT KAMI,</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>CUSTOMER&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;CV PUTRA PUTRA ADIDARMA</p>
 </body> 
 </html>
 

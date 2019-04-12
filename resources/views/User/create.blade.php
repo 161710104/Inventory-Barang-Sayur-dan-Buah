@@ -42,7 +42,7 @@
 											<div class="col-sm-4">
 												<div class="form-group">
 													<br>
-													<button type="submit" class="mb-xs mt-xs mr-xs btn btn-primary" id="aksi"><i class="fa fa-check-circle"></i> Simpan</button>
+													<button type="submit" onclick="return confirm('Yakin ingin menambahkan data?')" class="mb-xs mt-xs mr-xs btn btn-primary" id="aksi"><i class="fa fa-check-circle"></i> Simpan</button>
                                                     <button type="reset" class="mb-xs mt-xs mr-xs btn btn-danger"><i class="fa fa-ban"></i> Hapus</button>
 												</div>
 											</div>

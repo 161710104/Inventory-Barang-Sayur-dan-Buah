@@ -61,6 +61,7 @@ class BarangKeluarController extends Controller
         $barang_keluars->total = $request->harga[$id] * $request->kuantitas[$id];
 
         $barang = Barang::findOrFail($request->id_barang[$id]);
+        $barang->harga_jual = $request->harga[$id];
         $jumlah =  $barang->kuantitas;
         if ($request->kuantitas[$id] > $barang->kuantitas) {
             Session::flash("flash_notification", [
@@ -70,6 +71,10 @@ class BarangKeluarController extends Controller
            return response()->json([false]);
         }elseif($request->harga[$id] >= 0 ){
         $barang->kuantitas = $barang->kuantitas - $request->kuantitas[$id];
+        $insertLog                = new LogActivity();
+        $insertLog->user_id       = Auth::user()->id; 
+        $insertLog->description   = 'Tambah Barang keluar';
+        $insertLog->save();
         $barang->save();
         $barang_keluars->save();
         }
@@ -96,14 +101,8 @@ class BarangKeluarController extends Controller
      */
     public function edit($id)
     {
-        $barang_keluars = BarangKeluar::findorfail($id);
-        $barang = Barang::all();
-        $customer = Customer::all();
-        return view('BarangKeluar/edit',[
-            'barang_keluars' => $barang_keluars,
-            'barang' => $barang,
-            'customer' => $customer,
-        ]);
+        $barang_keluars = BarangKeluar::find($id);
+        return $barang_keluars;
     }
 
     /**
@@ -127,6 +126,10 @@ class BarangKeluarController extends Controller
         $kuantitas = $request->quantity_awal - $request->kuantitas;
         $barang->kuantitas =  $barang->kuantitas + $kuantitas;
         $barang->harga_beli = $request->harga;
+        $insertLog                = new LogActivity();
+        $insertLog->user_id       = Auth::user()->id; 
+        $insertLog->description   = 'Edit Barang keluar';
+        $insertLog->save();
         $barang->save();
         $barang_keluars->save();
         return response()->json(['success'=>true]);
@@ -149,10 +152,24 @@ class BarangKeluarController extends Controller
         $barang_keluars = BarangKeluar::find($id);
         if ($barang_coba) {
             $barang = Barang::findOrFail($barang_keluars->id_barang);
-            $barang->kuantitas =  $barang->kuantitas - $barang_keluars->kuantitas;
+            $barang->kuantitas =  $barang->kuantitas + $barang_keluars->kuantitas;
             $barang->save();
         }
          if($barang_keluars->delete())
+        {
+            echo 'Data Deleted';
+            $insertLog                = new LogActivity();
+              $insertLog->user_id       = Auth::user()->id;
+              $insertLog->description   = 'Menghapus data ='.$barang_keluars->barang->nama_barang;
+              $insertLog->save();
+        }
+    }
+
+
+    public function delete2($id)
+    {
+        $barang_keluars = BarangKeluar::find($id);
+        if($barang_keluars->delete())
         {
             echo 'Data Deleted';
         }
@@ -163,7 +180,12 @@ class BarangKeluarController extends Controller
         return Datatables::of($barang_keluars)
 
         ->addColumn('action', function ($barang_keluars) {
-              return '<center><a href="#" data-id="'.$barang_keluars ->id.'" rel="tooltip" title="Edit" class="btn btn-warning btn-simple btn-xs editBarang"><i class="fa fa-pencil"></i></a>&nbsp<a href="#" id="'.$barang_keluars->id.'" rel="tooltip" title="Delete" class="btn btn-danger btn-simple btn-xs delete" data-name="'.$barang_keluars->id.'"><i class="fa fa-trash-o"></i></a>';
+            if($barang_keluars->created_at > Carbon::today()){
+              return '<center><a href="#" data-id="'.$barang_keluars->id.'" rel="tooltip" title="Edit" class="btn btn-warning btn-simple btn-xs editBarang"><i class="fa fa-pencil"></i></a>&nbsp<a href="#" id="'.$barang_keluars->id.'" rel="tooltip" title="Delete" class="btn btn-danger btn-simple btn-xs delete" data-name="'.$barang_keluars->id.'"><i class="fa fa-trash-o"></i></a></center>';
+            }
+            else if ($barang_keluars->created_at < Carbon::today()) {
+                return '<center><a href="#" id="'.$barang_keluars->id.'" rel="tooltip" title="Delete" class="btn btn-danger btn-simple btn-xs delete2" data-name="'.$barang_keluars->id.'"><i class="fa fa-trash-o"></i></a></center>';
+            }
             })
         ->addColumn('tanggal_keluar', function ($barang_keluars) {
               return date('d F Y' , strtotime($barang_keluars->created_at));

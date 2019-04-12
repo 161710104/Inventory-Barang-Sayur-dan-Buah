@@ -4,11 +4,13 @@
 @section('header','Laporan Pemasukan')
 
 @section('content')
+
 <link rel="stylesheet" href="/assets/stylesheets/datatable_laporan.css" />
 					<ul class="app-breadcrumb breadcrumb side">
 					    <li class="breadcrumb-item"><i class="fa fa-home fa-lg"></i></li>
 					    <li class="breadcrumb-item">Laporan Pemasukan</li>
 					</ul>
+					@include('layouts._flash')
 
 
 						<div class="row">

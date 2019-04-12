@@ -44,7 +44,7 @@ body .btn-success:hover {
 								</h2>
 							</header>
 									<div class="panel-body">
-										<div class="form-body">
+										<div class="form-body content">
                                         <form id="formUser" method="post" enctype="multipart/form-data">
  										{{csrf_field()}} {{ method_field('POST') }}
           										<div class="form-group">
@@ -78,6 +78,7 @@ body .btn-success:hover {
 													</div>
 													<!-- endemailtext -->
 												</div>
+
 
 												<div class="form-group">
 													<label class="col-md-3 control-label">Kata Sandi : </label>
@@ -129,7 +130,7 @@ body .btn-success:hover {
 @section('js')
 <script type="text/javascript">
      $('#nama_user').attr('hidden',true); 
-     $('#email_user').attr('hidden',true); 
+     $('#email_user').attr('hidden',true);
      $('#password_user').attr('hidden',true); 
      $('#button-2').attr('hidden',true); 
 
@@ -231,5 +232,24 @@ body .btn-success:hover {
        $('#button-1').attr('hidden',false); 
 
     
+</script>
+<script type="text/javascript">
+  $('.content').delegate('.stok,.sisa_stok,.kuantitas','keyup',function(){
+      var tr = $(this).parent().parent();
+      var kuantitas = tr.find('.kuantitas').val();
+      var stok = tr.find('.stok').val();
+      var sisa_stok = (stok - kuantitas);
+      if (parseString(kuantitas) == parseString(stok)) {
+        $('#stoklebih').show();
+        var stoklebih = "Kuantitas melebihi stok, otomatis input semua stok"
+        $('#stoklebih').addClass('alert alert-danger alert-dismissable fade in').html(stoklebih);
+        setTimeout(function(){
+          $('#stoklebih').fadeOut('slow');
+        },5000);
+        tr.find('.kuantitas').val(stok);
+      }else{
+        tr.find('.sisa_stok').val(sisa_stok);
+      }
+    });
 </script>
 @endsection

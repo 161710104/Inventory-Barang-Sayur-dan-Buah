@@ -11,6 +11,7 @@ use App\Supplier;
 use Excel;
 use Yajra\DataTables\DataTables;
 use Carbon\Carbon;
+use Session;
 
 class LaporanPengeluaranController extends Controller
 {
@@ -120,6 +121,7 @@ class LaporanPengeluaranController extends Controller
         $dari = $request->dari;
         $sampai = $request->sampai;
         $supplier = $request->supplier;
+        if(new Carbon($request->sampai) > new Carbon($request->dari)){
         if($request->dari == '' && $request->sampai == '' && $request->supplier == 'all') {
           $barang_masuks = BarangMasuk::whereDate('created_at', Carbon::today())->get();
         }
@@ -160,6 +162,14 @@ class LaporanPengeluaranController extends Controller
                       'jenis_buah' => $jenis_buah,
                       'supplier' => $supplier
         ]);
+      }
+      elseif(new Carbon($request->sampai) < new Carbon($request->dari)){
+            Session::flash("flash_notification",[
+                "level" => "danger",
+                "message" => "Tanggal yang dimasukkan tidak valid"
+            ]);
+            return redirect()->back();
+        }
     }
 
     public function downloadPDF(Request $request)
